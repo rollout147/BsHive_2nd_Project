@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+        /* 기본 설정 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #134b84;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            color: #555;
+        }
+
+        /* 테이블 행 hover 효과 */
+        tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+   /* 페이지 네비게이션 스타일 */
+        #paging {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #paging a {
+            margin: 0 5px;
+            color: #4CAF50;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        #paging a:hover {
+            color: #333;
+        }
+
+        #paging a:visited {
+            color: #888;
+        }
+
+        /* 글 작성 버튼 스타일 */
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #134b84;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* 반응형 디자인 */
+        @media screen and (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            input[type="submit"] {
+                width: 90%;
+                font-size: 14px;
+            }
+        }

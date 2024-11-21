@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+.header {
+	margin-bottom: 100px;
+}
+
+.sidebar {
+	margin-left: 50px;
+}
+
+.mainContainer {
+	display: flex;
+	flex-direction: row;
+	margin: 50px 110px;
+	
+}
+
+.subContainer {
+	display: flex;
+	flex-direction: column;
+	margin: 70px 200px 100px 150px;
+}
+
+img {
+	margin: 50px 10px;
+	width: 1700px;
+	height: 700px;
+}
+
+table {
+	display: flex;
+	margin: 30px 0;
+	
+}
+
+th {
+	display: flex;
+	margin: 10px;
+	border-color: gray;	
+}
+
+td.lctr_num {
+	font: gray;
+}
+
+button {
+	display: flex;
+	
+}
+
+.onlnConts {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 50px;
+	
+}
+
+.syllabus insert {
+	border-color: black;
+}
+
+.syllabus select {
+	margin-bottom: 50px;
+	
+}

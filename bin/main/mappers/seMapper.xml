@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.postGre.bsHive.Mapper.seMapper">
+	<select id="onlnTotal" resultType="int">
+	    SELECT COUNT(*)
+		FROM "LCTR"
+		WHERE (("LCTR_NUM" / 100) % 10) BETWEEN 0 AND 4
+		AND "APLY_TYPE" IN ('110', '120', '140')
+	</select>
+	
+	<select id="onlnList" resultType="Onln_Lctr_List">
+	    SELECT * 
+	    FROM (
+	        SELECT "LCTR_NUM", "UNQ_NUM", "APLY_TYPE", "APLY_YDM", "PSCP_NOPE", "LCTR_NAME", 
+	               ROW_NUMBER() OVER (ORDER BY "APLY_YDM" DESC) AS rn
+	        FROM "LCTR"
+	        WHERE (("LCTR_NUM" / 100) % 10) BETWEEN 0 AND 4
+	        AND "APLY_TYPE" IN ('110', '120', '140')
+	    ) AS subquery
+	    WHERE rn BETWEEN #{start} AND #{end}
+	    ORDER BY "LCTR_NUM" DESC
+	</select>
+
+	<select id="onlnDtl" resultType="Onln_Lctr_List">
+	    SELECT ol.*, l.*
+	    FROM "ONLN_LCTR" ol
+	    JOIN "LCTR" l ON ol."LCTR_NUM" = l."LCTR_NUM"
+	    WHERE ol."LCTR_NUM" = #{lctr_Num}
+	</select>
+	
+	<select id="lctrviewList" resultType="Onln_Lctr_List">
+	    SELECT su."UNIT_NUM", su."LCTR_NUM", su."CONTS_NM", su."VDO_ID", 
+	    	   su."PLAY_HR", lv."MAX_DTL", lv."LAST_DTL", cc."CH_NM", 
+	    	   cc."PLAY_START", lv."LCTR_PACE", su."FILE_GROUP"
+		FROM "SYLLABUS_UNIT" su
+		LEFT JOIN "LCTR_VIEW" lv ON su."LCTR_NUM" = lv."LCTR_NUM" 
+		LEFT JOIN "CONTS_CH" cc ON su."LCTR_NUM" = lv."LCTR_NUM" 
+		WHERE su."LCTR_NUM" = #{lctr_num} AND lv."UNQ_NUM" = #{unq_Num}
+		ORDER BY CAST(su."UNIT_NUM" AS INTEGER) ASC;
+	</select>
+	
+	<select id="VideoId" resultType="Onln_Lctr_List">
+		SELECT *
+		FROM "SYLLABUS_UNIT" 
+    	WHERE "VDO_ID" = #{VDO_ID}
+	</select>
+	
+	<select id="chapterList" resultType="Onln_Lctr_List">
+		SELECT su.*, cc.* 
+		FROM "SYLLABUS_UNIT" su
+		LEFT JOIN "CONTS_CH" cc ON su."LCTR_NUM" = cc."LCTR_NUM" AND su."UNIT_NUM" = cc."UNIT_NUM"
+		WHERE su."VDO_ID" = #{VDO_ID}
+	</select>
+	
+	<select id="getMaxDtl" resultType="Lctr_View">
+		SELECT * 
+		FROM "LCTR_VIEW"
+		WHERE "LCTR_NUM" = #{LCTR_NUM} AND "UNIT_NUM" = #{UNIT_NUM} AND "UNQ_NUM" = #{UNQ_NUM}
+	</select>
+	
+	<select id="filePath" parameterType="int" resultType="File">
+        SELECT * 
+        FROM "FILE" 
+        WHERE "FILE_GROUP" = #{file_group}
+    </select>
+	
+	<select id="myLctrList" resultType="map" parameterType="int">
+	    SELECT 
+			LA."LCTR_NUM",             
+			L."LCTR_NAME",             
+			E."EMP_NM",             
+			OL."BGNG_YMD",             
+			OL."END_YMD",             
+			LA."PACE",             
+			CASE 
+		       	WHEN LEFT(LA."UNQ_NUM"::text, 1) = '1' AND L."APLY_TYPE" IN ('2', '4', '5', '130', '140', '150') THEN 
+		            CASE L."APLY_TYPE"
+		                WHEN '2' THEN '진행중'
+		                WHEN '130' THEN '진행중'
+		                WHEN '4' THEN '강의 종료'
+		                WHEN '140' THEN '강의 종료'
+		                WHEN '5' THEN '폐강'
+		                WHEN '150' THEN '폐강'
+		            END
+		        WHEN LEFT(LA."UNQ_NUM"::text, 1) != '1' THEN 
+		            CASE L."APLY_TYPE"	
+		                WHEN '1' THEN '모집중'
+		                WHEN '110' THEN '모집중'
+		                WHEN '2' THEN '진행중'
+		                WHEN '130' THEN '진행중'
+		                WHEN '4' THEN '강의 종료'
+		                WHEN '140' THEN '강의 종료'
+		                WHEN '5' THEN '폐강'
+		                WHEN '150' THEN '폐강'
+		            END
+		    END AS "APLY_TYPE",
+	    	CASE
+	    		WHEN LA."FNSH_YN" = '1'   THEN '수료완료'
+	            WHEN LA."FNSH_YN" = '100' THEN '수료완료' 
+	            WHEN LA."FNSH_YN" = '0'   THEN '미수료'
+	            WHEN LA."FNSH_YN" = '110' THEN '미수료'  
+	            ELSE '상태 미정'        
+        	END AS "FNSH_YN",
+	    	LA."UNQ_NUM"              
+		FROM 
+	    	"LCTR_APLY" LA           
+		JOIN 
+			"LCTR" L               
+		ON 
+	    	LA."LCTR_NUM" = L."LCTR_NUM"
+		JOIN 
+	    	"EMP" E                   
+		ON 
+	    	L."UNQ_NUM2" = E."UNQ_NUM"
+		JOIN 
+	    	"ONLN_LCTR" OL           
+		ON 
+		    LA."LCTR_NUM" = OL."LCTR_NUM"
+		WHERE 
+		    LA."UNQ_NUM" = #{unq_num}
+	    AND 
+	    	((LEFT(LA."UNQ_NUM"::text, 1) = '1' AND L."APLY_TYPE" IN ('2', '4', '5', '130', '140', '150'))
+	    OR
+			(LEFT(LA."UNQ_NUM"::text, 1) != '1'))
+		ORDER BY 
+    		LA."LCTR_NUM" ASC
+	</select>
+	
+	<select id="onlnAply" resultType="Onln_Lctr_List">
+		SELECT s.*, l.*, ol.*
+	    FROM "LCTR" l 
+	    LEFT JOIN "STDNT" s ON l."UNQ_NUM" = s."UNQ_NUM"
+	    LEFT JOIN "ONLN_LCTR" ol ON l."LCTR_NUM" = ol."LCTR_NUM"
+	    WHERE l."LCTR_NUM" = #{lctr_num}
+	</select>
+
+	<insert id="insertLctrAply" parameterType="Lctr_Aply">
+	    INSERT INTO "LCTR_APLY" ("LCTR_NUM", "UNQ_NUM", "APLY_STTS", "APLY_YMD","EVL_TOTAL", "ATNDC_SCR", "ASMT_SCR", "FNSH_YN", "PACE", "PTCP_TYPE", "PRIORITY_TYPE")
+	    VALUES (#{lctr_num}, #{unq_num}, 100, #{aply_ymd}, 0, 0, 0, 0, 0, #{ptcp_type}, #{priority_type})
+	</insert>
+
+	<select id="stdntDtl" resultType="User_Table">
+		SELECT s.*, l.*
+		FROM "STDNT" s
+		LEFT JOIN "LGN" l ON s."UNQ_NUM" = l."UNQ_NUM"
+		WHERE s."UNQ_NUM" = #{unq_num}
+	</select>
+
+	<insert id="insertLctrView" parameterType="Lctr_View">
+		INSERT INTO "LCTR_VIEW" ("LCTR_NUM", "UNQ_NUM", "UNIT_NUM", "MAX_DTL", "LAST_DTL", "LCTR_PACE", "CONTS_TYPE")
+		VALUES (#{lctrNum}, #{userUnqNum}, #{unitNum},0,0,0,0)
+	</insert>
+	
+	<select id="checkLctrView" resultType="Lctr_View">
+		SELECT * 
+		FROM "LCTR_VIEW"
+		WHERE "UNQ_NUM" = #{userUnqNum}
+		AND	  "LCTR_NUM" = #{lctrNum}
+	</select>
+	
+	<update id="countUpdate" parameterType="Lctr">
+	    <![CDATA[
+	    UPDATE "LCTR"
+	    SET "PSCP_COUNT" = "PSCP_COUNT" + 1
+	    WHERE "PSCP_COUNT" <= "PSCP_NOPE";
+	    ]]>
+	</update>
+	
+</mapper>

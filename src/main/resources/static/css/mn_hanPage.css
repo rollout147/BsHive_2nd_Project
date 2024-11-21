@@ -1,0 +1,139 @@
+@charset "UTF-8";
+html, body {
+  font-family: "Noto Sans KR", sans !important;
+}
+
+body {
+  font-family: "Noto Sans KR", sans;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-display: swap;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px; /* Fixed header height */
+    z-index: 300;
+}
+
+.han_main_container {
+	display: grid;
+    grid-template-columns: minmax(auto, 1700px);
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto; /* Margin for centering */
+    background-color: #fdfdfd;
+    padding: 100px 0 0;
+}
+
+.han_grid_container{
+	display: grid;
+    grid-template-columns: 410px 1180px;
+    gap: 80px;
+    width: 100%;
+    margin: 0 0 100px;
+    padding: 0 15px;
+}
+
+.lctrList_main_banner {
+	margin: 100px 0 0;
+	background-color: #323232;
+	position: relative;
+}
+
+.lctrList_main_banner_img{
+	display: flex;
+	width: 100%;
+	height: auto;
+	max-height: 500px;
+	opacity: 0.6;
+}
+
+.lctrList_main_banner_text {
+	position: absolute;
+	z-index: 3;
+	font-size: 60px;
+	left: 200px;
+	top: 220px;
+	font-weight: 800;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_text2 {
+	position: absolute;
+	z-index: 3;
+	font-size: 60px;
+	left: 420px;
+	top: 220px;
+	font-weight: 100;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_text3 {
+	position: absolute;
+	z-index: 3;
+	font-size: 20px;
+	left: 234px;
+	top: 195px;
+	font-weight: 100;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_do {
+	position: absolute;
+	z-index: 3;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background-color: #daaf67;
+	right: 150px;
+	top: 8px;
+}
+
+.han_sidebar{
+	display: flex;
+	justify-content: center;
+}
+
+.han_content {
+	border-top: 2px solid #323232;
+}
+
+.met_content {
+	border-top: 2px solid #323232;
+}
+
+.han_title {
+	font-size: 28px;
+	font-weight: 700;
+	text-decoration: underline;
+	margin: 60px 0 20px;
+}
+
+.col_1 {width: 800px; height:80px; text-align: center;}
+.col_2 {width: 380px; height:80px; text-align: center;}
+
+.han_table th {
+	background-color: #323232;
+	color: #fdfdfd;
+	font-size: 18px;
+}
+
+.han_table td {
+	border: 0.5px solid #323232; 
+	height: 80px;
+	text-align: center;
+}
+
+.img_imgbox {
+	width: 100%;
+	max-width: 1080px;
+	height: auto;
+	margin: 0 50px 60px;
+}

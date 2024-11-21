@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.postGre.bsHive.kh_TableMapper">
+	
+	
+<!-- =========================   STUDENT   ===============================	 -->
+	
+
+	
+	<select id="getTotStdntList" 	parameterType="Kh_StdntList" 	resultType="int">
+		SELECT COUNT(*) 
+		FROM (	SELECT 	s."UNQ_NUM",
+						s."STDNT_NM",
+						s."STDNT_TELNO",
+						s."STDNT_ADDR",
+						s."STDNT_DADDR",
+						s."STDNT_ZIP",
+						l."EML"
+				FROM public."STDNT" s
+					LEFT OUTER JOIN public."LGN" l
+						ON s."UNQ_NUM" = l."UNQ_NUM"
+					WHERE l."DEL_YN" = 0
+					<if test="keyword !=null">
+						AND	s."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+					</if>
+					ORDER BY "UNQ_NUM"
+				) 
+
+	</select>
+	
+	
+	<select id="getStdntList" 		parameterType="Kh_StdntList" 	resultType="Kh_StdntList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, stdntAll.*
+				FROM (	SELECT 	s."UNQ_NUM",
+								s."STDNT_NM",
+								s."STDNT_TELNO",
+								s."STDNT_ADDR",
+								s."STDNT_DADDR",
+								s."STDNT_ZIP",
+								l."EML"
+						FROM public."STDNT" s
+						LEFT OUTER JOIN public."LGN" l
+							ON s."UNQ_NUM" = l."UNQ_NUM"
+						WHERE l."DEL_YN" = 0
+						<if test="keyword !=null">
+							AND	s."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+						</if>
+						ORDER BY "UNQ_NUM"
+					 ) stdntAll
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	
+	
+	
+	
+<!-- =========================   EMPLOYEE   ===============================	 -->
+	
+
+		
+	<select id="getTotEmpList" 	parameterType="Kh_EmpList" 		resultType="int">
+		SELECT COUNT(*) 
+		FROM (	SELECT 	e."UNQ_NUM",
+						e."EMP_NM",
+						e."EMP_TELNO",
+						e."EMP_ADDR",
+						e."EMP_DADDR",
+						e."EMP_ZIP",
+						l."EML"
+				FROM public."EMP" e
+					LEFT OUTER JOIN public."LGN" l
+					ON e."UNQ_NUM" = l."UNQ_NUM"
+						AND l."MBR_SE" = #{mbr_se}
+					WHERE l."DEL_YN" = 0
+					<if test="keyword !=null">
+						AND	e."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+					</if>
+					ORDER BY "UNQ_NUM"
+				) 
+
+	</select>
+	
+	
+	<select id="getEmpList" 	parameterType="Kh_EmpList" 		resultType="Kh_EmpList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, empAll.*
+				FROM (	SELECT 	e."UNQ_NUM",
+						e."EMP_NM",
+						e."EMP_TELNO",
+						e."EMP_ADDR",
+						e."EMP_DADDR",
+						e."EMP_ZIP",
+						l."EML"
+				FROM public."EMP" e
+					LEFT OUTER JOIN public."LGN" l
+					ON e."UNQ_NUM" = l."UNQ_NUM"
+						AND l."MBR_SE" = #{mbr_se}
+					WHERE l."DEL_YN" = 0
+					<if test="keyword !=null">
+						AND	e."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+					</if>
+					ORDER BY "UNQ_NUM"
+				) empAll
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	<update id="updateLgnDelYn"			parameterType="Kh_StdntList">
+		UPDATE public."LGN"
+			SET	"DEL_YN" = 1
+			WHERE "EML" = #{eml}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+<!-- =========================   LECTURE   ===============================	 -->
+	
+
+		
+	
+	<select id="getTotLctrList" 	parameterType="Kh_LctrList" 		resultType="int">
+		SELECT COUNT(*) 
+		FROM (	SELECT 	l."LCTR_NUM",
+						l."UNQ_NUM2",
+						l."APLY_TYPE",
+						l."APLY_YDM",
+						l."PSCP_NOPE",
+						l."LCTR_NAME",
+						e."EMP_NM",
+						e."EMP_TELNO"
+				FROM public."LCTR" l
+				LEFT OUTER JOIN public."EMP" e
+				ON l."UNQ_NUM2" = e."UNQ_NUM"
+				WHERE LENGTH(l."LCTR_NUM"::TEXT) >= 6 
+					AND SUBSTR(l."LCTR_NUM"::TEXT, 6, 1) BETWEEN #{lectureType}::TEXT AND #{lectureTypeEnd}::TEXT
+				<if test="aply_type !=null">
+					AND (l."APLY_TYPE" = #{aply_type}::INTEGER
+					     OR l."APLY_TYPE" = SUBSTR(#{aply_type}::TEXT, 2, 1)::INTEGER)
+				</if>
+				)
+		<where> 					
+			<if test="keyword !=null">
+				"${search}"::TEXT LIKE '%'||#{keyword}||'%'
+			</if>
+		</where>
+				
+
+	</select>
+	
+	
+	<select id="getLctrList" 		parameterType="Kh_LctrList" 		resultType="Kh_LctrList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, lctrAll.*
+				FROM (	
+						SELECT 	l."LCTR_NUM",
+								l."UNQ_NUM2",
+								l."APLY_TYPE",
+								l."APLY_YDM",
+								l."PSCP_NOPE",
+								l."LCTR_NAME",
+								e."EMP_NM",
+								e."EMP_TELNO"
+						FROM public."LCTR" l
+						LEFT OUTER JOIN public."EMP" e
+						ON l."UNQ_NUM2" = e."UNQ_NUM"
+						WHERE LENGTH(l."LCTR_NUM"::TEXT) >= 6 
+							AND SUBSTR(l."LCTR_NUM"::TEXT, 6, 1) BETWEEN #{lectureType}::TEXT AND #{lectureTypeEnd}::TEXT
+						<if test="aply_type !=null">
+							AND (l."APLY_TYPE" = #{aply_type}::INTEGER
+							     OR l."APLY_TYPE" = SUBSTR(#{aply_type}::TEXT, 2, 1)::INTEGER)
+						</if>
+						)lctrAll
+				<where> 					
+					<if test="keyword !=null">
+						"${search}"::TEXT LIKE '%'||#{keyword}||'%'
+					</if>
+				</where>
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	<select id="getLctrDetail" 		parameterType="Kh_LctrList" 		resultType="Kh_LctrList">
+		SELECT 	l."LCTR_NUM",
+				l."UNQ_NUM2",
+				l."APLY_TYPE",
+				l."APLY_YDM",
+				l."PSCP_NOPE",
+				l."LCTR_NAME",
+				e."EMP_NM",
+				e."EMP_TELNO",
+				log."EML",
+				s1."CONTENT" as "div_name",
+				s2."CONTENT" as "dept_name"
+		FROM public."LCTR" l
+		LEFT OUTER JOIN public."EMP" e
+			ON l."UNQ_NUM2" 	= e."UNQ_NUM"
+		LEFT OUTER JOIN public."LGN" log
+			ON log."UNQ_NUM" 	= l."UNQ_NUM2"
+		LEFT OUTER JOIN public."SORT_CODE" s1
+			ON s1."BCODE" 		= #{bcode}::INTEGER
+			AND s1."MCODE"		= '99'
+		LEFT OUTER JOIN public."SORT_CODE" s2
+			ON s2."BCODE" 		= #{bcode}::INTEGER
+			AND s2."MCODE"		= #{mcode}::INTEGER
+		WHERE l."LCTR_NUM" 		= #{lctr_num}
+	</select>
+	
+	<update id="updateAplyType"			parameterType="Kh_LctrList">
+		UPDATE public."LCTR"
+			SET "APLY_TYPE" 	= #{aply_type}::INTEGER
+			WHERE "LCTR_NUM" 	= #{lctr_num};
+	</update>
+	
+	
+	<update id="openLecture"			parameterType="Kh_LctrList">
+		UPDATE public."LCTR"
+			SET "APLY_TYPE" 	= #{aply_type}::INTEGER,
+				"UNQ_NUM" 		= #{unq_num},
+				"APLY_YDM" 		= #{aply_ydm},
+				"END_DATE" 		= #{end_date}
+			WHERE "LCTR_NUM" 	= #{lctr_num};
+	</update>
+	
+	<insert id="insertAtdncType"		parameterType="Kh_LctrList">
+		INSERT INTO 
+			public."ATNDC_TYPE"(
+				"SN",
+				"LCTR_NUM",
+				"CRTR_CNT"
+				)
+				(
+				(SELECT COALESCE(MAX("SN"), 0) + 1 FROM public."ATNDC_TYPE"),
+				#{lctr_num},
+				#{crtr_cnt}
+				)
+
+	</insert>
+	
+	<update id="updateOflLctr"			parameterType="Kh_LctrList">
+		UPDATE public."OFL_LCTR"
+			SET "FNSH_COST" 	= #{fnsh_cost}
+			WHERE "LCTR_NUM" 	= #{lctr_num};
+	</update>
+	
+
+
+<!-- =========================   LectureRoom   ===============================	 -->	
+
+	<select id="getLctrmList" 	parameterType="String" 			resultType="Kh_Lctrm">
+		SELECT 	l."LCTRM_NUM",
+				l."LCTR_NUM",
+				l."BGNG_TM",
+				l."END_TM",
+				l."DOW_DAY",
+				lc."LCTR_NAME"
+		FROM public."LCTRM" l
+		LEFT OUTER JOIN public."LCTR" lc
+			ON l."LCTR_NUM"	= lc."LCTR_NUM"
+		WHERE	l."LCTR_NUM"::TEXT LIKE #{yearAndSemester}||'%'
+		
+	</select>	
+	
+	
+<!-- =========================   Scholarship   ===============================	 -->	
+
+	<select id="getTotSchList" 		parameterType="Kh_ScholarshipList" 		resultType="int">
+		SELECT COUNT(*) 
+		FROM (	SELECT 	s."SCHOLARSHIP_NUM",
+						s."LCTR_NUM",
+						s."PTCP_TYPE",
+						s."PRIORITY_TYPE",
+						s."SPRT_COST",
+						s."BANK_IMG",
+						s."PRIORITY_IMG",
+						s."PTCP_IMG",
+						s."GIVE_STTS",
+						s."BANK_NUM",
+						s."BANK_NAME",
+						s."UNQ_NUM",
+						lc."LCTR_NAME",
+						l."ATNDC_SCR",
+						l."ASMT_SCR",
+						l."FNSH_YN",
+						l."PACE",
+						st."STDNT_NM"
+				FROM public."SCHOLARSHIP" s
+				LEFT OUTER JOIN public."LCTR_APLY" l
+					ON s."UNQ_NUM" 		= l."UNQ_NUM"
+					AND s."LCTR_NUM"	= l."LCTR_NUM"
+				LEFT OUTER JOIN public."LCTR" lc
+					ON s."LCTR_NUM" 	= lc."LCTR_NUM"
+				LEFT OUTER JOIN public."STDNT" st
+					ON s."UNQ_NUM" 	= st."UNQ_NUM"
+				<if test="give_stts !=null">
+			 	<where>
+					s."GIVE_STTS" 	= #{give_stts}::TEXT
+				</where>
+				</if>				
+				<if test="keyword !=null">
+				<where>
+					e."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+				</where>
+				</if>
+				)
+	</select>
+
+
+	
+	<select id="getSchDetail" 		parameterType="Kh_ScholarshipList" 		resultType="Kh_ScholarshipList">
+		SELECT 	l."LCTR_NUM",
+				lc."LCTR_NAME",
+				l."UNQ_NUM",
+				s."STDNT_NM",
+				l."ATNDC_SCR",
+				l."ASMT_SCR",
+				l."FNSH_YN",
+				l."PACE",
+				ol."FNSH_COST"
+		FROM public."LCTR_APLY" l
+		LEFT OUTER JOIN public."OFL_LCTR" ol
+			ON l."LCTR_NUM" 	= ol."LCTR_NUM"
+		LEFT OUTER JOIN public."LCTR" lc
+			ON l."LCTR_NUM" 	= lc."LCTR_NUM"
+		WHERE l."LCTR_NUM"		= #{lctr_num}
+			AND l."UNQ_NUM"		= #{unq_num}
+	</select>
+	
+	
+	
+	<insert id="insertSchDetail"		parameterType="Kh_ScholarshipList">
+		INSERT INTO 
+			public."SCHOLARSHIP"(
+									"SCHOLARSHIP_NUM", 
+									"LCTR_NUM", 
+									"PTCP_TYPE", 
+									"PRIORITY_TYPE", 
+									"SPRT_COST", 
+									"BANK_IMG", 
+									"PRIORITY_IMG", 
+									"PTCP_IMG", 
+									"GIVE_STTS", 
+									"BANK_NUM", 
+									"BANK_NAME", 
+									"UNQ_NUM"
+								)
+			VALUES 	(
+					(SELECT COALESCE(MAX("SCHOLARSHIP_NUM"), 0) + 1 FROM public."SCHOLARSHIP"),
+					#{lctr_num},
+					#{ptcp_type},
+					#{priority_type},
+					#{sprt_cost},
+					#{bank_img},
+					#{priority_img},
+					#{ptcp_img},
+					'0',
+					#{bank_num},
+					#{bank_name},
+					#{unq_num}
+					)
+
+	</insert>
+	
+	
+	
+	<select id="getSchList" 	parameterType="Kh_ScholarshipList" 		resultType="Kh_ScholarshipList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, schAll.*
+				FROM (	SELECT 	s."SCHOLARSHIP_NUM",
+								s."LCTR_NUM",
+								s."PTCP_TYPE",
+								s."PRIORITY_TYPE",
+								s."SPRT_COST",
+								s."BANK_IMG",
+								s."PRIORITY_IMG",
+								s."PTCP_IMG",
+								s."GIVE_STTS",
+								s."BANK_NUM",
+								s."BANK_NAME",
+								s."UNQ_NUM",
+								lc."LCTR_NAME",
+								l."ATNDC_SCR",
+								l."ASMT_SCR",
+								l."FNSH_YN",
+								l."PACE",
+								st."STDNT_NM"
+						FROM public."SCHOLARSHIP" s
+						LEFT OUTER JOIN public."LCTR_APLY" l
+							ON s."UNQ_NUM" 		= l."UNQ_NUM"
+							AND s."LCTR_NUM"	= l."LCTR_NUM"
+						LEFT OUTER JOIN public."LCTR" lc
+							ON s."LCTR_NUM" 	= lc."LCTR_NUM"
+						LEFT OUTER JOIN public."STDNT" st
+							ON s."UNQ_NUM" 	= st."UNQ_NUM"
+					
+					 	<if test="give_stts !=null">
+						 	<where>
+								s."GIVE_STTS" 	= #{give_stts}::TEXT
+							</where>
+						</if>				
+						<if test="keyword !=null">
+							<where>
+								e."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+							</where>
+						</if>
+					
+					ORDER BY "SCHOLARSHIP_NUM"
+				) schAll
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+	
+	
+	
+	<select id="getScholarahipImgPath" 	parameterType="Kh_ScholarshipList" 		resultType="String">
+		SELECT 	"${imgType}"
+		FROM public."SCHOLARSHIP"
+		WHERE 	"SCHOLARSHIP_NUM" = #{scholarship_num}
+	</select>
+	
+	<update id="updateGiveStss"			parameterType="Kh_ScholarshipList">
+		UPDATE public."SCHOLARSHIP"
+			SET "GIVE_STTS" 			= #{give_stts}
+			WHERE "SCHOLARSHIP_NUM" 	= #{scholarship_num};
+	</update>
+	
+	
+	
+
+<!-- =========================   PRDOC   ===============================	 -->
+
+
+
+
+ 	<select id="getPrdocList" 		parameterType="Kh_PrdocList" 	resultType="Kh_PrdocList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, prdocAll.*
+				FROM (
+						SELECT 	p."APLY_NUM",
+								p."UNQ_NUM",
+								p."LCTR_NUM",
+								p."PRDOC_TYPE",
+								p."APLY_YMD",
+								p."ISSU_YMD",
+								p."ISSU_STTS",
+								lc."LCTR_NAME",
+								st."STDNT_NM",
+								st."STDNT_TELNO",
+								la."ATNDC_SCR",
+								la."ASMT_SCR",
+								la."PACE",
+								la."FNSH_YN",
+								le."EVL_TOTAL",
+								le."EVL_OX",
+								sc."PTCP_TYPE",
+								sc."PRIORITY_TYPE"
+						FROM public."PRDOC" p
+						LEFT OUTER JOIN public."STDNT" st
+							ON p."UNQ_NUM" 		= st."UNQ_NUM"
+						LEFT OUTER JOIN public."LCTR" lc
+							ON p."LCTR_NUM" 	= lc."LCTR_NUM"
+						LEFT OUTER JOIN public."LCTR_APLY" la
+							ON p."UNQ_NUM" 		= la."UNQ_NUM"
+							AND p."LCTR_NUM"	= la."LCTR_NUM"
+						LEFT OUTER JOIN public."LCTR_EVL" le
+							ON p."UNQ_NUM" 		= le."UNQ_NUM"
+						LEFT OUTER JOIN public."SCHOLARSHIP" sc
+							ON p."UNQ_NUM" 		= sc."UNQ_NUM"
+							AND p."LCTR_NUM"	= sc."LCTR_NUM"
+						WHERE p."PRDOC_TYPE"	= #{prdoc_type}::TEXT
+						<if test="keyword !=null">
+							AND ${search} LIKE '%'||#{keyword}||'%'
+						</if>
+						ORDER BY "APLY_NUM"
+					 ) prdocAll
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="getTotPrdocList" 	parameterType="Kh_PrdocList" 		resultType="int">
+		SELECT COUNT(*) 
+		FROM (
+				SELECT	p."APLY_NUM",
+						p."UNQ_NUM",
+						p."LCTR_NUM",
+						p."PRDOC_TYPE",
+						p."APLY_YMD",
+						p."ISSU_YMD",
+						p."ISSU_STTS",
+						lc."LCTR_NAME",
+						st."STDNT_NM",
+						st."STDNT_TELNO",
+						la."ATNDC_SCR",
+						la."ASMT_SCR",
+						la."PACE",
+						la."FNSH_YN",
+						le."EVL_TOTAL",
+						le."EVL_OX",
+						sc."PTCP_TYPE",
+						sc."PRIORITY_TYPE"
+				FROM public."PRDOC" p
+				LEFT OUTER JOIN public."STDNT" st
+					ON p."UNQ_NUM" 		= st."UNQ_NUM"
+				LEFT OUTER JOIN public."LCTR" lc
+					ON p."LCTR_NUM" 	= lc."LCTR_NUM"
+				LEFT OUTER JOIN public."LCTR_APLY" la
+					ON p."UNQ_NUM" 		= la."UNQ_NUM"
+					AND p."LCTR_NUM"	= la."LCTR_NUM"
+				LEFT OUTER JOIN public."LCTR_EVL" le
+					ON p."UNQ_NUM" 		= le."UNQ_NUM"
+				LEFT OUTER JOIN public."SCHOLARSHIP" sc
+					ON p."UNQ_NUM" 		= sc."UNQ_NUM"
+					AND p."LCTR_NUM"	= sc."LCTR_NUM"
+				WHERE p."PRDOC_TYPE"	= #{prdoc_type}::TEXT
+				<if test="keyword !=null">
+							AND ${search} LIKE '%'||#{keyword}||'%'
+				</if>
+				ORDER BY "APLY_NUM"
+				)
+
+	</select>
+	
+	<select id="getPrdocDetail" 	parameterType="Kh_PrdocList" 		resultType="Kh_PrdocList">
+		SELECT	p."APLY_NUM",
+				p."UNQ_NUM",
+				p."LCTR_NUM",
+				p."PRDOC_TYPE",
+				p."APLY_YMD",
+				p."ISSU_YMD",
+				p."ISSU_STTS",
+				lc."LCTR_NAME",
+				lc."END_DATE",
+				st."STDNT_NM",
+				st."STDNT_TELNO",
+				la."ATNDC_SCR",
+				la."ASMT_SCR",
+				la."PACE",
+				la."FNSH_YN",
+				le."EVL_TOTAL",
+				le."EVL_OX",
+				sc."PTCP_TYPE",
+				sc."PRIORITY_TYPE"
+		FROM public."PRDOC" p
+		LEFT OUTER JOIN public."STDNT" st
+			ON p."UNQ_NUM" 		= st."UNQ_NUM"
+		LEFT OUTER JOIN public."LCTR" lc
+			ON p."LCTR_NUM" 	= lc."LCTR_NUM"
+		LEFT OUTER JOIN public."LCTR_APLY" la
+			ON p."UNQ_NUM" 		= la."UNQ_NUM"
+			AND p."LCTR_NUM"	= la."LCTR_NUM"
+		LEFT OUTER JOIN public."LCTR_EVL" le
+			ON p."UNQ_NUM" 		= le."UNQ_NUM"
+		LEFT OUTER JOIN public."SCHOLARSHIP" sc
+			ON p."UNQ_NUM" 		= sc."UNQ_NUM"
+			AND p."LCTR_NUM"	= sc."LCTR_NUM"
+		WHERE p."PRDOC_TYPE"	= #{prdoc_type}::TEXT
+			AND p."APLY_NUM"	= #{aply_num}
+
+	</select>
+	
+	
+	<update id="updateIsuueDate"	parameterType="Kh_PrdocList">
+		UPDATE public."PRDOC"
+			SET "ISSU_YMD" 	= #{issu_ymd},
+				"ISSU_STTS"	= '130'
+		WHERE "APLY_NUM" 	= #{aply_num}
+	</update>
+	
+	
+	
+	
+<!-- =========================   Board   ===============================	 -->
+	
+
+	
+	<select id="getTotBoardList" 	parameterType="Kh_pstList" 		resultType="int">
+		SELECT COUNT(*) 
+		FROM (	SELECT 	p."PST_NUM",
+						p."UNQ_NUM",
+						p."PST_TTL",
+						p."PST_CLSF",
+						p."WRT_YMD",
+						p."DEL_YN",
+						e."EMP_NM" as "empName",
+						e."EMP_TELNO" as "empTelNo",
+						s."STDNT_NM" as "studentName",
+						s."STDNT_TELNO" as "studentTelNo"
+				FROM public."PST" p
+				LEFT OUTER JOIN public."EMP" e
+					ON p."UNQ_NUM" 		= e."UNQ_NUM"
+				LEFT OUTER JOIN public."STDNT" s
+					ON p."UNQ_NUM" 		= s."UNQ_NUM"
+				WHERE p."PST_CLSF" 	= #{ pst_clsf}
+<!-- 					AND e."EMP_NM" is NOT NULL
+					OR	s."STDNT_NM" is NOT NULL -->
+				<if test="keyword !=null">
+					<where> 					
+						s."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+					</where>
+				</if>
+				) 
+
+	</select>
+	
+	
+	<select id="getBoardList" 		parameterType="Kh_pstList" 		resultType="Kh_pstList">
+		SELECT * 
+		FROM (
+				SELECT (ROW_NUMBER() OVER()) AS rn, pstAll.*
+				FROM (	SELECT 	p."PST_NUM",
+								p."UNQ_NUM",
+								p."PST_TTL",
+								p."PST_CLSF",
+								p."WRT_YMD",
+								p."DEL_YN",
+								e."EMP_NM" as "empName",
+								e."EMP_TELNO" as "empTelNo",
+								s."STDNT_NM" as "studentName",
+								s."STDNT_TELNO" as "studentTelNo"
+						FROM public."PST" p
+						LEFT OUTER JOIN public."EMP" e
+							ON p."UNQ_NUM" 		= e."UNQ_NUM"
+						LEFT OUTER JOIN public."STDNT" s
+							ON p."UNQ_NUM" 		= s."UNQ_NUM"
+						WHERE p."PST_CLSF" 	= #{ pst_clsf}
+<!-- 							AND e."EMP_NM" is NOT NULL
+							OR	s."STDNT_NM" is NOT NULL -->
+						<if test="keyword !=null">
+							<where> 					
+								s."${search}"::TEXT LIKE '%'||#{keyword}||'%'
+							</where>
+						</if>
+					 ) pstAll
+		     )
+		
+		WHERE rn 
+    		BETWEEN #{start} AND #{end}
+	</select>
+		
+	
+	<update id="updateDelYnPst"			parameterType="Kh_pstList">
+		UPDATE public."PST"
+			SET "DEL_YN" 		= #{del_yn}
+			WHERE "PST_NUM" 	= #{pst_num};
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<!-- =========================   SORTCODE   ===============================	 -->	
+	
+	<select id="getSortContent" 	parameterType="Kh_SortCode" 		resultType="String">
+		SELECT "CONTENT"
+		FROM public."SORT_CODE"
+		WHERE "BCODE" 	= #{ bcode}
+			AND "MCODE"	= #{ mcode}
+
+
+	</select>	
+	
+	
+	
+	
+	
+</mapper> 

@@ -1,0 +1,296 @@
+@charset "UTF-8";
+html, body {
+  font-family: "Noto Sans KR", sans !important;
+}
+
+body {
+  font-family: "Noto Sans KR", sans;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-display: swap;
+}
+
+.Coureg_main_container {
+	display: grid;
+    grid-template-columns: minmax(auto, 1700px);
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto; /* Margin for centering */
+    background-color: #fdfdfd;
+    padding: 100px 0 0;
+}
+
+.Coureg_gird_container {
+    display: grid;
+    grid-template-columns: 410px 1180px;
+    gap: 80px;
+    width: 100%;
+    margin: 0 0 100px;
+    padding: 0 15px;
+}
+
+.Coureg_gird_content {
+	border-top: 2px solid #323232;
+	padding-top: 40px; 
+}
+
+.lctrList_main_banner {
+	margin: 0;
+	background-color: #323232;
+	position: relative;
+}
+
+.lctrList_main_banner_img{
+	display: flex;
+	width: 100%;
+	height: auto;
+	max-height: 500px;
+	opacity: 0.6;
+}
+
+.lctrList_main_banner_text {
+	position: absolute;
+	z-index: 3;
+	font-size: 60px;
+	left: 200px;
+	top: 220px;
+	font-weight: 800;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_text2 {
+	position: absolute;
+	z-index: 3;
+	font-size: 60px;
+	left: 420px;
+	top: 220px;
+	font-weight: 100;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_text3 {
+	position: absolute;
+	z-index: 3;
+	font-size: 20px;
+	left: 234px;
+	top: 195px;
+	font-weight: 100;
+	color: #fdfdfd;
+}
+
+.lctrList_main_banner_do {
+	position: absolute;
+	z-index: 3;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background-color: #daaf67;
+	right: 90px;
+	top: 8px;
+}
+
+.lecInfo_title {
+	font-size: 28px;
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+
+.lecInfo_title2 {
+	font-size: 28px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+.Coureg_title_text {
+	font-size: 16px;
+	font-weight: 600;
+	color: #D1291D;
+	margin-bottom: 8px;
+	margin-left: 50px;
+}
+
+.Coureg_prm_table {
+	border-top: 1.5px solid #323232;
+	border-bottom: 1.5px solid #323232;
+	margin: 0 50px 40px;
+	width: 1080px
+}
+
+.Coureg_prm_table th {
+	background-color: #eee;
+	width: 230px;
+	height: 80px;
+	text-align: center;
+	align-items: center;
+	border-bottom: 0.4px solid #b5bbc0;
+}
+
+.Coureg_prm_table td {
+	background-color: #fdfdfd;
+	width: 270px;
+	border-bottom: 0.4px solid #b5bbc0;
+	padding-left: 20px; 
+}
+
+.Coureg_title {
+	margin-top: 40px;
+}
+
+.Coureg_user_table {
+	border-top: 1.5px solid #323232;
+	border-bottom: 1.5px solid #323232;
+	margin: 0 50px 40px;
+	width: 1080px
+}
+
+.Coureg_user_table th{
+	background-color: #eee;
+	width: 230px;
+	height: 80px;
+	text-align: center;
+	align-items: center;
+	border-bottom: 0.4px solid #b5bbc0;
+}
+
+.Coureg_user_table td{
+	background-color: #fdfdfd;
+	width: 770px;
+	border-bottom: 0.4px solid #b5bbc0;
+	padding-left: 20px;
+}
+
+.radio_label {
+	margin-right: 15px;
+}
+
+.radio_but {
+	margin-right: 5px;
+	width: 25px;
+	height: auto;
+}
+
+.col_1 {width: 160px; text-align: center;}
+.col_2 {width: 300px; }
+.col_3 {width: 190px; }
+.col_4 {width: 510px; max-width: 510px;}
+
+.Coureg_user_table_1 {
+	border-top: 1.5px solid #323232;
+	border-bottom: 1.5px solid #323232;
+	margin: 0 50px 60px;
+	width: 1080px
+}
+.Coureg_user_table_1 th {
+	background-color: #eee;
+	height: 80px;
+	text-align: center;
+	align-items: center;
+	border-bottom: 0.4px solid #b5bbc0;
+}
+
+.Coureg_user_table_1 td {
+	background-color: #fdfdfd;
+	width: 770px;
+	border-bottom: 0.4px solid #b5bbc0;
+}
+
+
+.Coureg_user_table_1 a {
+	text-decoration: underline; /* 밑줄 표시 */
+    color: #323232; /* 기본 링크 색상 */
+    transition: color 0.3s ease; /* 색상 전환 효과 */
+}
+
+.Coureg_user_table_1 a:hover {
+	color: #134b84; /* 호버 시 색상 변경 */
+    text-decoration: underline; /* 밑줄 유지 */
+    transform: none; /* 크기 변화 방지 */
+}
+
+/* 이용약관 텍스트가 들어가는 div에 스크롤 및 높이 제한 추가 */
+.Coureg_form_group .text {
+    max-height: 300px; /* 스크롤이 나타나기 전 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    padding: 15px; /* 내부 여백 추가 */
+    border: 1px solid #ddd; /* 경계선 추가 */
+    background-color: #f9f9f9; /* 배경색 추가 */
+    white-space: pre-line; /* 띄어쓰기와 줄바꿈을 그대로 유지하고, 탭 문자는 숨김 */
+    margin-bottom: 20px;
+}
+
+.check span {
+	font-size: 21px;
+	font-weight: 600;
+}
+
+.agree {
+	margin-bottom: 20px;
+	margin-top: 40px;
+}
+
+.agree Strong {
+	font-size: 28px;
+	font-weight: 700;
+}
+
+.checkBtn {
+    transform: scale(1.5); /* 체크박스를 1.5배 크기로 키움 */
+    -webkit-transform: scale(1.5); /* 크롬, 사파리에서 지원 */
+    margin-right: 10px; /* 텍스트와 간격 */
+}
+
+.but_submit{
+	position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100px; /* Fixed header height */
+    z-index: 300;
+    background-color: #fdfdfd;
+    text-align: center;
+}
+
+.butgo {
+	width: 400px;
+	height: 70px;
+	position: absolute;
+	top: 15px;
+	left: 450px;
+	border: none;
+	background-color: #134b84;
+	color: #fdfdfd;
+	font-size: 21px;
+	font-weight: 600;
+	transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.butgo:hover {
+	background-color: #1a6fc7;
+}
+
+.butgo2 {
+	width: 400px;
+	height: 70px;
+	position: absolute;
+	top: 15px;
+	right: 450px;
+	border: 0.8px solid #134b84;
+	background-color: #fdfdfd;
+	color: #134b84;
+	font-size: 21px;
+	font-weight: 600;
+	transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.butgo2:hover {
+	background-color: #323232;
+	color: #fdfdfd;
+}
+
+footer {
+	margin: 0 0 100px;
+}

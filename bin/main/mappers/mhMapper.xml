@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.postGre.bsHive.MhDao">
+
+	<select id="totalGongList" resultType="int">
+	
+		select count(*) from "PST" where "PST_CLSF" = '1' and not ("DEL_YN"='1')
+	
+	</select>
+	
+	<select id="listGong" parameterType="Pst" resultType="Pst">
+		<![CDATA[
+			SELECT *
+			FROM (
+			  SELECT 
+			    ROW_NUMBER() OVER (ORDER BY "PST_NUM" DESC) AS rn, 
+			    "PST_TTL", 
+			    "WRT_YMD", 
+			    "PST_NUM",
+			    "FILE_GROUP",
+			    "UNQ_NUM"
+			  FROM "PST"
+			  WHERE "PST_CLSF" = '1' 
+			    AND "DEL_YN" <> '1'
+			) AS subquery
+			WHERE rn BETWEEN #{start} AND #{end}
+			ORDER BY rn		
+		]]>
+	
+	</select>
+	
+	<select id="GongView" parameterType="Pst" resultType="Pst">
+		select "PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "FILE_GROUP", "UNQ_NUM" 
+		from "PST" 
+		where "PST_CLSF" = '1' and "PST_NUM" = #{pst_num}
+		
+	</select>
+	
+	<update id="GongDelete" parameterType="int">
+		update "PST" set "DEL_YN" = '1' where "PST_NUM" = #{pst_num}
+	
+	</update>
+	
+<!-- 	<insert id="gongInsert" parameterType="Pst">
+	
+		insert into "PST" ("PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM", "PST_CLSF", "DEL_YN", "FILE_GROUP") 
+		values (#{pst_ttl}, to_char(now(), 'YYYY-MM-DD'), #{pst_cn}, nextval('seq_pst_num'), #{unq_num}, '1', '0', #{file_group})
+	
+	</insert> -->
+		
+	<update id="updateGong" parameterType="Pst">
+		update "PST" set "PST_TTL" = #{pst_ttl}, "WRT_YMD" = to_char(now(), 'YYYY-MM-DD'), "PST_CN" = #{pst_cn} 
+		where "PST_NUM" = #{pst_num};
+	</update>
+	
+	<select id="totalYakList" resultType="int">
+	
+		select count(*) from "PST" where "PST_CLSF" = '2' and not ("DEL_YN"='1')
+	
+	</select>
+	
+	<select id="listYak" parameterType="Pst" resultType="Pst">
+				<![CDATA[
+		SELECT *
+		FROM (
+		  SELECT 
+		    ROW_NUMBER() OVER (ORDER BY "PST_NUM" DESC) AS rn, 
+		    "PST_TTL", 
+		    "WRT_YMD", 
+		    "PST_NUM"
+		  FROM "PST"
+		  WHERE "PST_CLSF" = '2' 
+		    AND "DEL_YN" <> '1'
+		) AS subquery
+		WHERE rn BETWEEN #{start} AND #{end}
+		ORDER BY rn
+		]]>
+	
+	</select>
+	
+		<select id="yakView" parameterType="Pst" resultType="Pst">
+		select "PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM" from "PST" where "PST_CLSF" = '2' and "PST_NUM" = #{pst_num}
+		
+	</select>
+	
+		<insert id="yakInsert" parameterType="Pst">
+	
+		insert into "PST" ("PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM", "PST_CLSF", "DEL_YN", "FILE_GROUP") 
+		values (#{pst_ttl}, to_char(now(), 'YYYY-MM-DD'), #{pst_cn}, nextval('seq_pst_num'),#{unq_num}, '2', '0', #{file_group})
+	
+	</insert>
+
+	<update id="updateYak" parameterType="Pst">
+		update "PST" set "PST_TTL" = #{pst_ttl}, "WRT_YMD" = to_char(now(), 'YYYY-MM-DD'), "PST_CN" = #{pst_cn} 
+		where "PST_NUM" = #{pst_num};
+	</update>
+	
+	<update id="yakDelete" parameterType="int">
+		update "PST" set "DEL_YN" = '1' where "PST_NUM" = #{pst_num}
+	
+	</update>
+	
+	
+	<select id="totalFaqList" resultType="int">
+	
+		select count(*) from "PST" where "PST_CLSF" = '3' and not ("DEL_YN"='1')
+	
+	</select>
+	
+	<select id="listFaq" parameterType="Pst" resultType="Pst">
+	
+	
+		<![CDATA[
+		SELECT *
+		FROM (
+		  SELECT 
+		    ROW_NUMBER() OVER (ORDER BY "PST_NUM" DESC) AS rn, 
+		    "PST_TTL", 
+		    "WRT_YMD", 
+		    "PST_NUM"
+		  FROM "PST"
+		  WHERE "PST_CLSF" = '3' 
+		    AND "DEL_YN" <> '1'
+		) AS subquery
+		WHERE rn BETWEEN #{start} AND #{end}
+		ORDER BY rn
+		]]>
+
+
+	</select>
+	
+	<select id="fnqView" parameterType="Pst" resultType="Pst">
+		select "PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM" from "PST" where "PST_CLSF" = '3' and "PST_NUM" = #{pst_num}  
+		
+	</select>
+	
+		<insert id="faqInsert" parameterType="Pst">
+	
+		insert into "PST" ("PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM", "PST_CLSF", "DEL_YN","FILE_GROUP") 
+		values (#{pst_ttl}, to_char(now(), 'YYYY-MM-DD'), #{pst_cn}, nextval('seq_pst_num'),#{unq_num}, '3', '0', #{file_group})
+	
+	</insert>
+	
+		<update id="faqDelete" parameterType="int">
+		update "PST" set "DEL_YN" = '1' where "PST_NUM" = #{pst_num}
+	
+	</update>
+	
+		<update id="updatefaq" parameterType="Pst">
+		update "PST" set "PST_TTL" = #{pst_ttl}, "WRT_YMD" = to_char(now(), 'YYYY-MM-DD'), "PST_CN" = #{pst_cn} 
+		where "PST_NUM" = #{pst_num};
+	</update>
+	
+	<select id="totaloneList" resultType="int">
+	
+		select count(*) from "PST" where "PST_CLSF" = '4' and not ("DEL_YN"='1')
+	
+	</select>
+	
+	<select id="listOne" parameterType="Pst" resultType="Pst">
+		<![CDATA[
+		  SELECT *
+		  FROM (
+		    SELECT 
+		      ROW_NUMBER() OVER (ORDER BY "P"."PST_NUM" DESC) AS rn, 
+		      "P"."PST_TTL", 
+		      "P"."WRT_YMD", 
+		      "P"."PST_NUM",
+		      "S"."STDNT_NM" 
+		    FROM "PST" AS "P"
+		    JOIN "STDNT" AS "S" ON "P"."UNQ_NUM" = "S"."UNQ_NUM"
+		    WHERE "P"."PST_CLSF" = '4' 
+		      AND "P"."DEL_YN" <> '1'
+		  ) AS subquery
+		  WHERE rn BETWEEN #{start} AND #{end}
+		  ORDER BY rn
+		]]>
+
+	
+	</select>
+	
+	
+	<select id="oneView" parameterType="Pst" resultType="Pst">
+SELECT "P".*, "S"."STDNT_NM", "E"."EMP_NM"
+FROM "PST" AS "P"
+    JOIN "STDNT" AS "S" ON "P"."UNQ_NUM" = "S"."UNQ_NUM"
+    LEFT JOIN "EMP" AS "E" ON "P"."ANSWR"::integer = "E"."UNQ_NUM" 
+WHERE "P"."PST_CLSF" = '4' 
+  AND "P"."PST_NUM" = #{pst_num}
+		
+	</select>
+	
+	<update id="oneDelete" parameterType="int">
+		update "PST" set "DEL_YN" = '1' where "PST_NUM" = #{pst_num}
+	
+	</update>
+	
+	<insert id="oneInsert" parameterType="Pst">
+	
+		insert into "PST" ("PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM", "PST_CLSF", "DEL_YN", "FILE_GROUP") 
+		values (#{pst_ttl}, to_char(now(), 'YYYY-MM-DD'), #{pst_cn}, nextval('seq_pst_num'), #{unq_num}, '4', '0', #{file_group})
+	</insert>
+	
+	<update id="updateone" parameterType="Pst">
+		update "PST" set "PST_TTL" = #{pst_ttl}, "WRT_YMD" = to_char(now(), 'YYYY-MM-DD'), "PST_CN" = #{pst_cn} 
+		where "PST_NUM" = #{pst_num}
+	</update>
+	
+	    <insert id="FileUpload" parameterType="File">
+        INSERT INTO "FILE" (
+            "FILE_GROUP", "FILE_NO", "FILE_UNQ", "DWNLD_FILE_NM", "FILE_SIZE", "FILE_PATH_NM"
+        ) VALUES (
+           #{file_group}, #{file_no}, #{file_unq}, #{dwnld_file_nm}, #{file_size}, #{file_path_nm}
+        )
+    </insert>
+    
+    <insert id="noticeCreate" parameterType="Pst">
+        INSERT INTO "PST" (
+            "PST_TTL", "WRT_YMD", "PST_CN", "PST_NUM", "UNQ_NUM", "PST_CLSF", "DEL_YN", "FILE_GROUP"
+        ) VALUES (
+            #{pst_ttl}, to_char(now(), 'YYYY-MM-DD'), #{pst_cn}, nextval('seq_pst_num'), #{unq_num}, '1', '0', #{file_group}
+        )
+    </insert>
+    
+	<select id="getNextFileGroupId" resultType="int">
+	    SELECT NEXTVAL('seq_file_group')
+	</select>
+	
+	<select id="getMaxFileSeq" parameterType="int" resultType="java.lang.Integer">
+	    SELECT COALESCE(MAX("FILE_NO"), 0) 
+	    FROM "FILE" 
+	    WHERE "FILE_GROUP" = #{file_group}
+	</select>
+	    
+	<select id="getFile" parameterType="Map" resultType="File">
+	    SELECT *
+	    FROM "FILE"
+	    WHERE "FILE_GROUP"=#{file_group} AND "FILE_NO" =#{file_no}
+    </select>
+
+    <select id="getFilesByGroup" parameterType="Int" resultType="File">
+	    SELECT *
+	    FROM "FILE"
+	    WHERE "FILE_GROUP"=#{file_group} 
+    </select>
+    
+    <select id="filePath" parameterType="int" resultType="File">
+    	select * from "FILE" where "FILE_GROUP" = #{file_group}
+    	
+    </select>
+    
+    
+    
+    <select id="totaloneList1" resultType="int">
+	
+		select count(*) from "PST" where "PST_CLSF" = '4' and not ("DEL_YN"='1') and "UNQ_NUM" = #{unq_num}
+	
+	</select>
+	
+	<select id="listOne1" parameterType="Pst" resultType="Pst">
+		<![CDATA[
+		  SELECT *
+		  FROM (
+		    SELECT 
+		      ROW_NUMBER() OVER (ORDER BY "P"."PST_NUM" DESC) AS rn, 
+		      "P"."PST_TTL", 
+		      "P"."WRT_YMD", 
+		      "P"."PST_NUM",
+		      "S"."STDNT_NM" 
+		    FROM "PST" AS "P"
+		    JOIN "STDNT" AS "S" ON "P"."UNQ_NUM" = "S"."UNQ_NUM"
+		    WHERE "P"."PST_CLSF" = '4' 
+		      AND "P"."DEL_YN" <> '1' and "P"."UNQ_NUM" = #{unq_num}
+		  ) AS subquery
+		  WHERE rn BETWEEN #{start} AND #{end}
+		  ORDER BY rn
+		]]>
+
+	
+	</select>
+	
+	<update id="updateAnswr" parameterType="Pst">
+		update "PST" set "PST_TTL"= '[답변완료] ' || #{pst_ttl}, "ANSWR_YMD" = to_char(now(), 'YYYY-MM-DD'), "ANS" = #{ans}, "ANSWR" = #{unq_num},
+		"ANS_YN" = '1' 
+		where "PST_NUM" = #{pst_num}
+	</update>
+	
+	<delete id="deleteFile" parameterType="File">
+	
+		DELETE FROM "FILE"
+			WHERE "FILE_GROUP" = #{file_group}
+	
+	</delete>
+    
+    </mapper>

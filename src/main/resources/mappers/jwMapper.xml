@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.postGre.bsHive.jwMapper">
+ 
+ 	<select id="selectMaxLctrNum" resultType="int">
+ 		SELECT	COALESCE(MAX(CAST(SUBSTRING(CAST("LCTR_NUM" AS TEXT) FROM LENGTH(CAST("LCTR_NUM" AS TEXT)) - 1 FOR 2) AS INTEGER)), 0) AS max_last_two_digits
+    	FROM	"ONLN_LCTR"
+ 	</select>
+ 
+ 
+ 	<select id="selectUserTable" parameterType="int" resultType="User_Table">
+ 		SELECT	"UNQ_NUM"
+ 		FROM	"EMP"
+ 		WHERE	"UNQ_NUM" = CAST(#{unqNum} AS INTEGER)
+
+ 	</select>
+
+ 	<insert id="insertOnln_Lctr" parameterType="Onln_Lctr">
+ 		INSERT into "ONLN_LCTR"(
+	 							"LCTR_NUM",
+	 							"LCTR_EXPLN",
+	 							"BGNG_YMD",
+	 							"END_YMD",
+	 							"RCRT_NOPE",
+	 							"FNSH_CRTR",
+	 							"UNQ_NUM2"
+	 						  )
+	 
+ 		VALUES (
+ 				 #{lctr_num},
+ 				 #{lctr_expln},
+ 				 #{bgng_ymd},
+ 				 #{end_ymd},
+ 				 #{rcrt_nope},
+ 				 #{fnsh_crtr},
+ 				 #{unq_num2}		
+ 			   )
+ 	</insert>
+ 	
+ 	<insert id="insertLCTR" parameterType="Lctr">
+ 		INSERT into "LCTR" (
+ 							 "LCTR_NUM",
+ 							 "UNQ_NUM",
+ 							 "APLY_TYPE",
+ 							 "APLY_YDM",
+ 							 "PSCP_NOPE",
+ 							 "LCTR_NAME",
+ 							 "UNQ_NUM2",
+ 							 "END_DATE",
+ 							 "PSCP_COUNT"
+ 							)
+ 							
+ 		VALUES (
+ 				 #{lctr_num},
+ 				 0,
+ 				 100,
+ 				 #{aply_ydm},
+ 				 #{pscp_nope},
+ 				 #{lctr_name},
+ 				 #{unq_num2},
+ 				 #{end_date},
+ 				 0
+ 				)
+ 	</insert>
+ 	
+ 	
+ 	<select id="selectOnlnLctrNum" parameterType="Integer" resultType="Onln_Lctr_List">
+	    SELECT DISTINCT	o."LCTR_NUM" , o."LCTR_EXPLN" ,l."LCTR_NAME"
+	    FROM 			"ONLN_LCTR" o
+	    LEFT JOIN 		"SYLLABUS_UNIT" s ON o."LCTR_NUM" = s."LCTR_NUM"
+	    LEFT JOIN 		"LCTR" l ON o."LCTR_NUM"          = l."LCTR_NUM"
+	    WHERE 			o."UNQ_NUM2" = #{unq_num}  
+	</select>
+ 	
+ 	
+ 	<insert id="insertFileUpload" parameterType="File">
+ 		INSERT INTO "FILE" (
+        					 "FILE_GROUP", 
+        					 "FILE_NO", 
+        					 "FILE_UNQ", 
+        					 "DWNLD_FILE_NM", 
+        					 "FILE_SIZE", 
+        					 "FILE_PATH_NM"
+    						) 
+    	VALUES (
+       			 #{file_group}, 
+       			 #{file_no}, 
+       			 #{file_unq}, 
+       			 #{dwnld_file_nm}, 
+       			 #{file_size}, 
+       			 #{file_path_nm}
+    			)
+ 	</insert>
+ 	
+ 	
+ 	<insert id="insertSyll" parameterType="Syllabus_Unit" keyColumn="UNIT_NUM" keyProperty="unit_num">
+ 
+ 		INSERT into "SYLLABUS_UNIT" (
+ 								  "UNIT_NUM",
+ 								  "LCTR_NUM",
+ 								  "VDO_ID",
+ 								  "CONTS_NM",
+ 								  "PLAY_HR",
+ 								  "FILE_GROUP"
+ 								  )
+ 		VALUES (
+ 				(SELECT COALESCE(MAX("UNIT_NUM")+1 , 1)
+				 FROM "SYLLABUS_UNIT" 
+				 WHERE "LCTR_NUM" = #{lctr_num}),
+ 				#{lctr_num}, 
+ 				#{vdo_id},
+ 				#{conts_nm},
+ 				#{play_hr},
+ 				#{file_group}
+ 				)
+ 				
+ 				
+ 		<selectKey resultType="Integer" order="AFTER" keyProperty="unit_num" >
+ 				SELECT  max("UNIT_NUM")  
+				FROM    "SYLLABUS_UNIT"
+				WHERE   "LCTR_NUM" = #{lctr_num}  		
+		</selectKey>		
+ 	
+ 	</insert>
+ 	
+ 	<select id="selectNextFileGroupId" resultType="int">
+        SELECT	NEXTVAL('seq_file_group')
+    </select>
+
+    <select id="selectMaxFileSeq" parameterType="int" resultType="java.lang.Integer">
+        SELECT	COALESCE(MAX("FILE_NO"), 0) 
+        FROM	"FILE" 
+        WHERE	"FILE_GROUP" = #{file_group}
+    </select>
+ 	
+ 	
+ 	
+ 
+ 	<select id="selectListSyll" parameterType="syllabus_Unit" resultType="Syllabus_Unit">
+ 		SELECT	s.* 
+ 		FROM	"SYLLABUS_UNIT" s
+ 		JOIN	"ONLN_LCTR" o ON s."LCTR_NUM" = o."LCTR_NUM"
+        WHERE	s."LCTR_NUM" = #{lctr_num}
+        AND		s."VDO_ID" = #{vdo_id}
+ 	</select>
+ 	
+ 
+ 	<insert id="insertContsCh" parameterType="Conts_Ch">
+ 		INSERT into "CONTS_CH" (
+ 								"LCTR_NUM",
+ 								"UNIT_NUM",
+ 								"CH_NUM",
+ 								"PLAY_START",
+ 								"CH_NM"
+ 								)
+ 		
+ 		VALUES 					(
+ 								#{lctr_num}, 
+ 								#{unit_num}, 
+ 								#{ch_num}, 
+ 								#{play_start}, 
+ 								#{ch_nm}
+ 								)
+ 		
+ 	</insert>
+ 	
+ 	
+ 	<select id="selectListContsCh" resultType="Conts_Ch">
+ 		SELECT	c.* 
+	    FROM	"CONTS_CH" c
+	    JOIN	"SYLLABUS_UNIT" s ON c."UNIT_NUM" = s."UNIT_NUM"
+	    JOIN	"ONLN_LCTR" o ON s."LCTR_NUM" = o."LCTR_NUM"
+	    WHERE	o."UNQ_NUM2" = #{unq_num}
+ 	</select>
+ 	
+ 	<select id="selectListOnlnLctr" parameterType="Integer" resultType="Onln_Lctr">
+ 		SELECT	* 
+ 		FROM	"ONLN_LCTR"
+        WHERE	"UNQ_NUM" = #{unq_num}
+ 	</select>
+ 
+ 	
+ 	<select id="detailOnlnLctr" parameterType="java.lang.Integer" resultType="Onln_Lctr_List">
+ 		SELECT	l."LCTR_NAME", o.*, s.*, c.*
+ 		FROM	"LCTR" l
+ 		JOIN	"ONLN_LCTR" o ON l."LCTR_NUM" = o."LCTR_NUM"
+ 		JOIN	"SYLLABUS_UNIT" s ON o."LCTR_NUM" = s."LCTR_NUM"
+ 		JOIN	"CONTS_CH" c 
+			ON	s."LCTR_NUM" = c."LCTR_NUM"
+			AND	s."UNIT_NUM" = c."UNIT_NUM"
+ 		WHERE	o."LCTR_NUM" = #{lctr_num}
+ 	</select>
+ 
+ 
+ </mapper>

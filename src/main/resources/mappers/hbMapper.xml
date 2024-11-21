@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.postGre.bsHive.hbMapper">
+ 	<select id="hbLctr_num" parameterType="int" resultType="Lctr">
+		SELECT 	"LCTR_NAME", "LCTR_NUM"
+		FROM	"LCTR"
+		WHERE	"LCTR_NUM" = #{lctr_num}
+	</select>
+
+	<select id="getCompletedEvaluationCount" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM "EVL_SBMSN"
+	    WHERE "LCTR_NUM" = #{lctr_num} AND "UNQ_NUM" = #{unq_num}
+	</select>
+ 
+ 	<select id="getCourseEval"  resultType="Evl_qitem">
+        SELECT * FROM "EVL_QITEM"
+ 	</select>
+ 	
+	<insert id="hbaddCourseEval" parameterType="Evl_sbmsn">
+	    INSERT INTO public."EVL_SBMSN" 
+	        ("EVL_OX", "EVL_DETNUM", "LCTR_NUM", "UNQ_NUM", "EVL_NUM")
+	    VALUES 
+	        (#{evl_ox}, #{evl_detnum}, #{lctr_num}, #{unq_num}, #{evl_num});
+	</insert>
+	
+	<select id="getEvaluationScores" resultType="Integer">
+    SELECT "EVL_NUM"
+    FROM "EVL_SBMSN"
+    WHERE "LCTR_NUM" = #{lctr_num} AND "UNQ_NUM" = #{unq_num}
+	</select>
+	
+	<update id="updateCourseEvalTotal">
+	    UPDATE "LCTR_APLY"
+	    SET "EVL_TOTAL" = #{evl_total}
+	    WHERE "LCTR_NUM" = #{lctr_num} AND "UNQ_NUM" = #{unq_num}
+	</update>
+	
+	<select id="getstudentClassList" resultType="Hb_Evl">
+    SELECT 
+        e."LCTR_NAME", 
+        s."STDNT_NM", 
+        la.*
+    FROM 
+        "LCTR_APLY" la
+    JOIN 
+        "LCTR" e ON la."LCTR_NUM" = e."LCTR_NUM"
+    JOIN
+        "STDNT" s ON la."UNQ_NUM" = s."UNQ_NUM"
+    WHERE 
+        la."LCTR_NUM" = #{lctr_num}
+	</select>
+ 	<select id="getDetailGrade" resultType="Hb_Evl">
+	    SELECT l.*, s.*
+	    FROM public."LCTR_APLY" l
+	    JOIN public."STDNT" s ON l."UNQ_NUM" = s."UNQ_NUM"
+	    WHERE s."UNQ_NUM" = CAST(#{unq_num} AS INTEGER) 
+	    AND l."LCTR_NUM" = CAST(#{lctr_num} AS INTEGER)
+	</select>
+	
+	  <select id="getstudentClassListWith" resultType="Hb_Evl">
+    	SELECT l."LCTR_NAME", s."STDNT_NM", e.*
+    	FROM public."LCTR" l
+  	 	JOIN public."LCTR_APLY" e ON l."LCTR_NUM" = e."LCTR_NUM"
+  	 	JOIN public."STDNT" S ON l."UNQ_NUM" = S."UNQ_NUM"
+  	 	WHERE l."LCTR_NUM" = ${lctr_num}
+    </select>
+    
+	<select id="hbgetStudentDetail" resultType="Hb_evl">
+	    SELECT lr."LCTR_NUM", s."STDNT_NM", s."UNQ_NUM", lr."EVL_TOTAL"
+		FROM "LCTR_APLY" lr
+		JOIN "STDNT" s ON s."UNQ_NUM" = lr."UNQ_NUM"
+		WHERE s."UNQ_NUM" = #{unq_num} 
+		AND lr."LCTR_NUM" = #{lctr_num}
+	</select>
+	
+	<insert id="saveStudentAnswer" parameterType="Hb_Test">
+	    INSERT INTO "TEST_SUBMIT" (lctr_num, unq_num, qitem_md)
+	    VALUES (#{lctrNum}, #{unqNum}, #{qitemMd})
+	</insert>
+	
+	 <select id="getGradeByUnqNum" resultType="Hb_Evl">
+	    <![CDATA[
+	        SELECT
+	            "UNQ_NUM" AS UNQ_NUM,
+	            "APLY_STTS" AS APLY_STTS,
+	            "APLY_YMD" AS APLY_YMD,
+	            "ATNDC_SCR" AS ATNDC_SCR,
+	            "ASMT_SCR" AS ASMT_SCR,
+	            "FNSH_YN" AS FNSH_YN,
+	            "PACE" AS PACE,
+	            "EVL_TOTAL" AS EVL_TOTAL
+	        FROM "LCTR_APLY"
+	        WHERE "UNQ_NUM" = #{unqNum}
+	    ]]>
+	</select>
+	 
+    <select id="hbgetQuestionByQitemNo" resultType="Hb_Test">
+        <![CDATA[
+        SELECT *
+        FROM "TEST_QITEM"
+        WHERE "QITEM_NO" = #{qitemNo}
+        LIMIT #{itemsPerPage} OFFSET #{offset}
+        ]]>
+    </select>
+	
+	<select id="checkTestExist" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM "TEST"
+		WHERE CAST("CYCL" AS integer) = #{cycl} AND "LCTR_NUM" = #{lctr_num}
+	</select>
+	<insert id="insertTest" parameterType="Hb_Test">
+    	INSERT INTO "TEST" ("PRBLM", "ATCH", "CYCL", "LCTR_NUM")
+    	VALUES (#{prblm}, #{atch}, #{cycl}, #{lctr_num})
+    	ON CONFLICT ("CYCL", "LCTR_NUM") DO NOTHING
+	</insert>
+	<insert id="insertCransQitem" parameterType="Hb_Test">
+	    INSERT INTO "CRANS_QITEM" ("QITEM_NO", "QITEM_EXPLN", "CYCL", "LCTR_NUM", "CRANS_YN", "CRANS_SBJ")
+	    VALUES (#{qitem_no}, #{qitem_expln}, #{cycl}, #{lctr_num}, #{crans_yn}, #{crans_sbj})
+	</insert>
+		
+	<insert id="insertTestQitem" parameterType="Hb_Test">
+	    INSERT INTO "TEST_QITEM" ("QITEM_NO", "QITEM_NM", "QITEM_TYPE", "QITEM_SCR", "CYCL", "LCTR_NUM")
+	    VALUES (#{qitem_no}, #{qitem_nm}, #{qitem_type}, #{qitem_scr}, #{cycl}, #{lctr_num})
+	</insert>
+
+	
+	<select id="selectExamByLctrNum" parameterType="int" resultType="Hb_Test">
+	    SELECT * 
+	    FROM "TEST"
+	    WHERE "LCTR_NUM" = #{lctrNum} 
+	    AND "ATCH"::timestamp > NOW()
+	</select>
+
+    <insert id="insertExamAnswers" parameterType="map">
+        <foreach collection="answers" item="answer" index="qitem_no" separator=",">
+            INSERT INTO "TEST_SUBMIT" ("UNQ_NUM", "QITEM_NO", "ANSWER", "EXAM_ID", "CYCL", "LCTR_NUM")
+            VALUES (#{unq_num}, #{qitem_no}, #{answer}, #{exam.exam_id}, #{exam.cycl}, #{exam.lctr_num})
+        </foreach>
+    </insert>
+    
+    <select id="selectProblemsByLctrNum" parameterType="int" resultType="map">
+    SELECT "QITEM_NO","QITEM_NM"
+    FROM "TEST_QITEM"
+    WHERE "LCTR_NUM" = #{lctr_num}
+	</select>
+    
+    <select id="hbgetGradeByUnqNum" parameterType="int" resultType="com.postGre.bsHive.Adto.Hb_Evl">
+    SELECT 
+        "ATNDC_SCR",
+        "ASMT_SCR", 
+		"CRANS_SCR"		
+    FROM 
+        "LCTR_APLY"   
+    WHERE 
+        "UNQ_NUM"= #{unq_num}   
+</select>
+    <update id="updateStudentAfterClass" parameterType="map">
+    UPDATE "LCTR_APLY"
+    SET "FNSH_YN" = '1'     
+    WHERE "LCTR_NUM" = #{lctr_num}
+	</update>
+	
+	<select id="getProblemById" resultType="Hb_Test">
+	    SELECT tq.*, t.*, cq.*
+	    FROM "TEST_QITEM" tq
+	    JOIN "TEST" t ON tq."LCTR_NUM" = t."LCTR_NUM"
+	    JOIN "CRANS_QITEM" cq ON tq."QITEM_NO" = cq."QITEM_NO"
+	    WHERE tq."QITEM_NO" = #{qitem_no}
+	</select>
+	
+ 	<select id="CallupdateAttendanceScore" resultType="int">
+    SELECT public."get_atndc_score"(#{lctr_num, jdbcType=INTEGER}, #{unq_num, jdbcType=INTEGER})
+	</select>
+
+ 	<select id="CallupdateAssessmentScore" resultType="int">
+    SELECT public."get_asmt_score"(#{lctr_num, jdbcType=INTEGER}, #{unq_num, jdbcType=INTEGER})
+	</select>
+ 
+	<update id="updateAttendanceScore" parameterType="map">
+        UPDATE "LCTR_APLY"
+        SET "ATNDC_SCR" = #{atndc_scr}
+        WHERE "UNQ_NUM" = #{unq_num}
+        AND "LCTR_NUM" = #{lctr_num}
+    </update>
+    
+    <update id="updateAssignmentScore" parameterType="map">
+        UPDATE "LCTR_APLY"
+        SET "ASMT_SCR" = #{asmt_scr}
+        WHERE "UNQ_NUM" = #{unq_num}
+        AND "LCTR_NUM" = #{lctr_num}
+    </update>
+</mapper>
+
+
+	

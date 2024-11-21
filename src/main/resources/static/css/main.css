@@ -1,0 +1,573 @@
+@charset "UTF-8";
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents double scrolling */
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px; /* Fixed header height */
+    z-index: 300;
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+}
+
+.main_header_img {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.main_banner_navigetor{
+	position: absolute;
+	bottom: 100px;
+	left: 200px;
+	
+}
+
+.main_banner_image {
+    min-width: 100%;
+    max-height: 911px;
+    transition: opacity 0.8s ease; /* Smooth transition effect */
+    opacity: 0; /* Set initial opacity to 0 for all images */
+    top: 0; /* Align them to the top */
+    left: 0; /* Align them to the left */
+}
+
+.main_banner_image.active {
+    opacity: 0.8; /* Current active image */
+    position: absolute;
+}
+
+.main_banner_image:not(.active) {
+    opacity: 0; /* Inactive images */
+}
+
+.main_header_banner,
+.main_body_container,
+.main_footer_container {
+    scroll-snap-align: start;
+    height: 100vh; /* 전체 뷰포트 높이를 채움 */
+    width: 100vw;
+}
+
+.main_header_banner {
+    display: flex;
+    position: relative; /* 이미지와 내비게이터의 상대적 위치 설정 */
+    width: 100%;
+    height: auto;
+    background-color: #323232;
+}
+
+.main_banner_navigator {
+    position: absolute; /* 절대 위치 지정 */
+    bottom: 10px; /* 하단 10px */
+    left: 10px; /* 좌측 10px */
+    display: flex;
+    gap: 5px;
+    z-index: 10; /* 이미지 위에 표시 */
+}
+
+.main_navigator {
+    display: inline-block;
+    width: 8px; /* 기본 너비 */
+    height: 8px;
+    background-color: #ededed; /* 비활성화 색상 */
+    border-radius: 50%; /* 기본 원 모양 */
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.7s, width 0.7s;
+}
+
+.main_navigator.active {
+    width: 16px; /* Increases width for selected state */
+    height: 16px;
+    border-radius: 12px; /* Makes it a rounded box */
+    background-color: #fdfdfd; /* Active color */
+}
+
+.main_header_banner_img {
+    width: 100%;
+    height: auto;
+    max-height: 911px;
+    transition: transform 1s ease;
+    flex-shrink: 0; /* 각 이미지가 flex 컨테이너 내에서 고정 크기를 유지 */
+}
+
+.main_body_container {
+    display: grid;
+    grid-template-columns: minmax(auto, 1700px);
+    justify-content: center;
+    padding: 0;
+    max-width: 100%;
+    margin: 0 auto; /* Margin for centering */
+    height: 911px;
+    min-height: 911px;
+    background-color: #ffffff;
+    padding: 100px 0 0 0;
+}
+
+.main_body_content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 40px;
+    width: 100%;
+    margin: 0 15px;
+    max-height: 911px;
+    position: relative;
+}
+
+.main_table_div {
+    grid-column: 1/span 2;
+    grid-row: 1;
+    z-index: 1;
+}
+
+.main_but_img {
+    grid-column: 1/span 2;
+    grid-row: 2;
+    display: flex; /* Flex for button images */
+    justify-content: space-between;
+    max-height: 150px;
+    align-items: center;
+    width: 1020px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.main_calendar {
+    grid-column: 1/span 2;
+    grid-row: 3;
+    z-index: 1;
+}
+
+.main_event_banner {
+    grid-column: 3;
+    grid-row: 1/span 3;
+    width: 100%;
+    max-width: 540px;
+    height: auto;
+}
+
+.main_event_banner_box {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.main_event_image {
+    min-width: 100%;
+    max-height: 700px;
+    transition: opacity 0.5s ease; /* Smooth transition effect */
+    opacity: 0 !important;; /* Set initial opacity to 0 for all images */
+    top: 0; /* Align them to the top */
+    left: 0; /* Align them to the left */
+}
+
+.main_event_image.active {
+    display: block;
+    opacity: 1 !important; /* Current active image */
+    position: absolute;
+}
+
+.main_event_image:not(.active) {
+    opacity: 0;
+}
+
+.main_event_banner_text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 540px;
+    padding: 20px 0;
+   	margin: 22px 0;
+}
+
+.main_event_banner_navigetor{
+	display: flex;
+	
+}
+
+.main_event_banner_navigator {
+    display: flex;
+    gap: 5px;
+}
+
+.event_navigator {
+    display: inline-block;
+    width: 16px; /* 기본 너비 */
+    height: 16px;
+    background-color: gray; /* 비활성화 색상 */
+    border-radius: 50%; /* 기본 원 모양 */
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, width 0.3s;
+}
+
+.event_navigator.active {
+    width: 60px; /* Increases width for selected state */
+    height: 16px;
+    border-radius: 12px; /* Makes it a rounded box */
+    background-color: #134b84; /* Active color */
+}
+
+.event_navigator.active::before,
+.event_navigator.active::after {
+    content: '';
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 2px;
+    background-color: #555;
+}
+
+.event_navigator.active::before {
+    left: -15px;
+}
+
+.event_navigator.active::after {
+    right: -15px;
+}
+
+.view_more {
+    font-weight: bold;
+    color: #134b84;
+    cursor: pointer;
+}
+
+.main_but_img_src {
+    width: 100%;
+    max-width: 100px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.main_but_img_src:hover {
+    animation: bounce 0.5s ease;
+}
+
+/* 튀는 애니메이션 정의 */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px); /* 위로 10px 이동 */
+    }
+}
+
+.main_but_img a {
+    text-align: center;
+    text-decoration: none;
+    transition: color 0.3s;
+    font-size: 16px;
+    color: #323232;
+    font-weight: 600;
+}
+
+.main_but_img_text {
+    margin-top: 20px;
+}
+
+.main_calendar_header {
+    font-size: 24px;
+    font-weight: 700;
+    height: 30px;
+    margin: 0 0 20px;
+}
+
+.main_calendar_card {
+    display: flex;
+}
+
+.main_calendar_card_date {
+    background-color: #eee;
+    margin: auto 15px auto 0;
+    padding: 15px 18px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.main_calendar_card_week {
+    font-size: 14px;
+    color: #134b84;
+}
+
+.main_calendar_card_day {
+    font-size: 24px;
+    font-weight: 800;
+    color: #134b84;
+}
+
+.main_gogi_title {
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0 0 20px;
+}
+
+.main_gogi_table {
+	margin: 0 50px;
+	width: 1020px;
+}
+.main_gogi_table_td1 {width: 120px; text-align: center; height: 60px;}
+.main_gogi_table_td2 {width: 600px; text-align: center; height: 60px;}
+.main_gogi_table_td3 {width: 200px; text-align: center; height: 60px;}
+.main_gogi_table_img {width: 100px; text-align: center; height: 60px;}
+.col_2:nth-child(odd) {
+    background-color: #f2f2f2; /* Light gray background for odd rows */
+}
+
+.col_2:nth-child(even) {
+    background-color: #fdfdfd; /* White background for even rows */
+}
+
+.main_footer_container {
+    display: grid;
+    grid-template-columns: minmax(auto, 1700px);
+    justify-content: center;
+    padding: 0;
+    max-width: 100%;
+    margin: 0 auto; /* Margin for centering */
+    height: 911px;
+    min-height: 911px;
+    background-color: #ffffff;
+    padding: 100px 0 0 0;
+}
+
+.main_footer_content{
+	display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1;
+    gap: 40px;
+    width: 100%;
+    margin: 0 15px;
+    min-height: 811px;
+}
+
+.main_gogi_table_img_images {
+	width: 24px;
+	height: auto;
+}
+
+.main_calender_card{
+	display: flex;
+}
+
+.main_calendar_card_list {
+	display: flex;
+	justify-content: space-between;
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.main_calender_card_week {
+	background-color: #134b84;
+	border-radius: 5px;
+	width: 70px;
+	height: 70px;
+	align-items: center;
+	text-align: center;
+	padding: 20px 24px;
+	font-size: 21px;
+	font-weight: 600;
+	color: #fdfdfd;
+	margin-right: 10px;
+}
+
+.main_calender_card_content_img {
+	background: #fdfdfd;
+	border: 0.3px solid #134b84;
+	font-size: 12px;
+	width: 40px;
+	text-align: center;
+}
+
+.main_calender_card_content_title {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.main_calender_card_content_date {
+	font-size: 14px;
+	font-weight: 700;
+	color: #a6a6a6;
+}
+
+.main_calendar_card_list_a {
+	text-decoration: none;
+	color: #323232;
+}
+
+@keyframes rotateBackground {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+ }
+ 
+/* 회전 애니메이션이 적용된 div 스타일 */
+.rotating-background {
+  width:800px;
+  height: 800px;
+  background-image: url('your-image.jpg'); /* 배경 이미지 설정 */
+  background-size: cover; /* 배경 이미지 크기 조절 */
+  background-position: center;
+  position: absolute;
+  z-index: 0;
+  top: 30px;
+  opacity: 0.7;
+  
+  /* 애니메이션 적용 */
+  animation: rotateBackground 300s linear infinite; /* 20초마다 한 바퀴 회전 */
+}
+
+.main_footer_left_title {
+	font-size: 45px;
+	font-weight: 700;
+	margin-bottom: 30px; 
+}
+
+.instagram_right_title {
+	font-size: 30px;
+	font-weight: 500;
+	margin-bottom: 30px; 
+	margin-top: 40px;
+}
+
+.gaojo {
+	color: #134b84;
+}
+
+.sem {
+	width: 672px;
+	height: 476px;
+}
+
+.youtube {
+	width: 672px;
+	height: 476px;
+	background-color: #eee;
+	z-index: 1;
+}
+
+.youtube:hover .youtube_title_text_back {
+	background-color: #ff0033;
+}
+
+.youtube_title_text {
+	display: flex;
+	align-items: center;
+	margin-top: 30px;
+}
+
+.youtube_title_text_img {
+	width: 32px;
+	height: auto; 
+}
+
+.youtube_title_text_back {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	text-align: center;
+	padding: 8px 0 0;
+	margin-right: 20px; 
+	background-color: #323232;
+}
+
+.youtube_title_text_1 {
+	font-size: 32px;
+	font-weight: 600;
+}
+
+.youtube_title_text_2 {
+	margin-left: 70px;
+	font-size: 20px;
+	font-weight: 400;
+	color: #a3a3a3;
+}
+
+.main_footer_left {
+	margin: 20px auto 0;
+	z-index: 1;
+}
+
+.instagram_posts_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.instagram_post {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+}
+
+.main_footer_right {
+    width: 100%; /* 전체 너비 */
+    max-width: 800px; /* 최대 너비 설정 */
+    border: none; /* 테두리 스타일 */
+    padding: 10px;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+/* 스크롤 가능한 Instagram 게시물 리스트 */
+.instagram_embed {
+    display: flex;
+    flex-wrap: wrap; /* 여러 행으로 나눠서 표시 */
+    gap: 10px; /* 카드 사이 간격을 적절히 설정 */
+    max-height: 600px; /* 리스트의 최대 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+    z-index: 1;
+    background: none;
+}
+
+/* 각 게시물의 스타일 (2개씩 배치) */
+.instagram_post {
+    width: calc(50% - 10px); /* 한 행에 2개씩 배치 */
+   	height: auto;
+    min-height: 580px; /* 최소 높이 설정 */
+    box-sizing: border-box;
+    padding: 10px;
+    background: none;
+}
+
+.rotating-background_2 {
+  width:800px;
+  height: 800px;
+  background-image: url('your-image.jpg'); /* 배경 이미지 설정 */
+  background-size: cover; /* 배경 이미지 크기 조절 */
+  background-position: center;
+  position: absolute;
+  z-index: -1;
+  top: 1930px;
+  right: 100px;
+  opacity: 0.8;
+  
+  /* 애니메이션 적용 */
+  animation: rotateBackground 300s linear infinite; /* 20초마다 한 바퀴 회전 */
+}
