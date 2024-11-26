@@ -55,4 +55,7 @@ public interface JwService {
 	// 마이페이지 나의 강의실에서 강의번호 클릭하면 상세보기
 	List<Onln_Lctr_List> 	detailOnlnLctr(Integer lctr_num);
 
+	// 수정폼 이동
+	Onln_Lctr_List 			updateOnlnLctr(int lctr_num);
+
 }

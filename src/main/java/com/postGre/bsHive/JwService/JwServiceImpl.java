@@ -158,6 +158,12 @@ public class JwServiceImpl implements JwService {
 		return onln_list;
 	}
 
+	// 수정폼 이동
+	@Override
+	public Onln_Lctr_List updateOnlnLctr(int lctr_num) {
+		System.out.println("JwServiceImpl updateOnlnLctr Start...");
+		return null;
+	}
 
-		
+	
 }

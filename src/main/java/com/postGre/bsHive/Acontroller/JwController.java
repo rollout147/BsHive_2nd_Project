@@ -395,4 +395,20 @@ public class JwController {
 		return "jw/detailOnlnLctr";
 	}
 	
+	// 수정폼 이동
+	@GetMapping(value = "/updateOnlnLctr")
+	public String updateOnlnLctr(@RequestParam(value = "Lctr_num") Integer lctr_num,
+								 Onln_Lctr_List onln_lctr_list1,
+								 Model model) {
+		System.out.println("JwController updateOnlnLctr Start...");
+		System.out.println("JwController updateOnlnLctr Lctr_Num->"+lctr_num);
+		
+		Onln_Lctr_List onln_lctr_list = js.updateOnlnLctr(onln_lctr_list1.getLctr_num());
+		System.out.println("JwController updateOnlnLctr onln_lctr_list->"+onln_lctr_list);
+		
+		model.addAttribute("onln_lctr_list", onln_lctr_list);
+		
+		return "jw/updateOnlnLctr";
+	}
+	
 }
