@@ -195,13 +195,15 @@
  
  
  	<update id="updateLctr" parameterType="Lctr">
- 		UPDATE "LCTR" SET 
- 		
+ 		UPDATE "LCTR" SET "LCTR_NAME" = #{lctr_name} 		
  		WHERE "LCTR_NUM" = #{lctr_num}
  	</update>
  	
  	<update id="updateOnlnLctr" parameterType="Onln_Lctr">
- 		UPDATE 
+ 		UPDATE "Onln_Lctr"
+ 		
+ 		
+ 		WHERE "LCTR_NUM" = #{lctr_num}
  	</update>
  	
  	<update id="updateSyll" parameterType="Syllabus_Unit">
