@@ -158,12 +158,50 @@ public class JwServiceImpl implements JwService {
 		return onln_list;
 	}
 
-	// 수정폼 이동
+	// 수정완료후 이동
 	@Override
-	public Onln_Lctr_List updateOnlnLctr(int lctr_num) {
-		System.out.println("JwServiceImpl updateOnlnLctr Start...");
-		return null;
+	public int updateLctr(Lctr lctr) {
+		System.out.println("JwServiceImpl updateLctr Start...");
+		
+		int lctrUpdate = 0;
+		lctrUpdate = jd.updateLctr(lctr);		
+		System.out.println("JwServiceImpl updateLctr lctrUpdate->"+lctrUpdate);
+		
+		return lctrUpdate;
 	}
 
-	
+
+	@Override
+	public int updateOnlnLctr(Onln_Lctr onln_lctr) {
+		System.out.println("JwServiceImpl updateOnlnLctr Start...");
+		
+		int onlnLctrUpdate = 0;
+		onlnLctrUpdate = jd.updateOnlnLctr(onln_lctr);
+		System.out.println("JwServiceImpl updateOnlnLctr onlnLctrUpdate->"+onlnLctrUpdate);
+		
+		return onlnLctrUpdate;
+	}
+
+
+	@Override
+	public int updateSyll(Syllabus_Unit syllabus_unit) {
+		System.out.println("JwServiceImpl updateSyll Start...");
+		
+		int syllUpdate = 0;
+		syllUpdate = jd.updateSyll(syllabus_unit);
+		System.out.println("JwServiceImpl updateSyll syllUpdate->"+syllUpdate);
+		return syllUpdate;
+	}
+
+
+	@Override
+	public int updateContsCh(Conts_Ch conts_ch) {
+		System.out.println("JwServiceImpl updateContsCh Start...");
+		
+		int contsChUpdate = 0;
+		contsChUpdate = jd.updateContsCh(conts_ch);
+		System.out.println("JwServiceImpl updateContsCh contsChUpdate->"+contsChUpdate);
+		return contsChUpdate;
+	}
+
 }

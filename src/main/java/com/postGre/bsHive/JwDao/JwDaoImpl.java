@@ -281,5 +281,68 @@ public class JwDaoImpl implements JwDao {
 		return onln_list;
 	}
 
+	// 수정완료후 이동
+	@Override
+	public int updateLctr(Lctr lctr) {
+		System.out.println("JwDaoImpl updateLctr Start...");
+		
+		int lctrUpdate = 0;
+		try {
+			lctrUpdate = session.update("updateLctr", lctr);
+			System.out.println("JwDaoImpl updateLctr lctrUpdate->"+lctrUpdate);
+			
+		} catch (Exception e) {
+			System.out.println("JwDaoImpl updateLctr Exception->"+e.getMessage());
+		}
+		return lctrUpdate;
+	}
+
+
+	@Override
+	public int updateOnlnLctr(Onln_Lctr onln_lctr) {
+		System.out.println("JwDaoImpl updateOnlnLctr Start...");
+		
+		int onlnLctrUpdate = 0;
+		try {
+			onlnLctrUpdate = session.update("updateOnlnLctr", onln_lctr);
+			
+		} catch (Exception e) {
+			System.out.println("JwDaoImpl updateOnlnLctr Exception->"+e.getMessage());
+		}
+		return onlnLctrUpdate;
+	}
+
+
+	@Override
+	public int updateSyll(Syllabus_Unit syllabus_unit) {
+		System.out.println("JwDaoImpl updateSyll Start...");
+		
+		int syllUpdate = 0;
+		try {
+			syllUpdate = session.update("updateSyll", syllabus_unit);
+			
+		} catch (Exception e) {
+			System.out.println("JwDaoImpl updateSyll Exception->"+e.getMessage());
+		}
+		
+		return syllUpdate;
+	}
+
+
+	@Override
+	public int updateContsCh(Conts_Ch conts_ch) {
+		System.out.println("JwDaoImpl updateContsCh Start...");
+		
+		int contsChUpdate = 0;
+		try {
+			contsChUpdate = session.update("updateContsCh", conts_ch);
+			
+		} catch (Exception e) {
+			System.out.println("JwDaoImpl updateContsCh Exception->"+e.getMessage());
+		}
+		
+		return contsChUpdate;
+	}
+
 	
 }

@@ -397,18 +397,54 @@ public class JwController {
 	
 	// 수정폼 이동
 	@GetMapping(value = "/updateOnlnLctr")
-	public String updateOnlnLctr(@RequestParam(value = "Lctr_num") Integer lctr_num,
-								 Onln_Lctr_List onln_lctr_list1,
+	public String updateList(@RequestParam(value = "Lctr_num") Integer lctr_num,
 								 Model model) {
 		System.out.println("JwController updateOnlnLctr Start...");
 		System.out.println("JwController updateOnlnLctr Lctr_Num->"+lctr_num);
 		
-		Onln_Lctr_List onln_lctr_list = js.updateOnlnLctr(onln_lctr_list1.getLctr_num());
-		System.out.println("JwController updateOnlnLctr onln_lctr_list->"+onln_lctr_list);
+		List<Onln_Lctr_List> onlnLctrDetailList = js.detailOnlnLctr(lctr_num);
+		System.out.println("JwController updateOnlnLctr onlnLctrDetailList->"+onlnLctrDetailList);
 		
-		model.addAttribute("onln_lctr_list", onln_lctr_list);
+		model.addAttribute("onlnLctrDetailList", onlnLctrDetailList);
 		
 		return "jw/updateOnlnLctr";
+	}
+	
+	// 수정완료후 이동
+	@PostMapping(value = "updateList")
+	public String updateAllOnlnLctr(Onln_Lctr onln_lctr,
+								 	Syllabus_Unit syllabus_unit,
+								 	Conts_Ch conts_ch,
+								 	Model model) {
+		System.out.println("JwController updateList Start...");
+		
+		// Onln_Lctr 업데이트
+		int onlnLctrUpdate		= js.updateOnlnLctr(onln_lctr);
+		System.out.println("JwController updateList onlnLctrUpdate->"+onlnLctrUpdate);
+		
+		// Lctr 업데이트
+		Lctr lctr = new Lctr();
+		lctr.setAply_ydm(onln_lctr.getBgng_ymd());
+		lctr.setEnd_date(onln_lctr.getEnd_ymd());
+		lctr.setPscp_nope(onln_lctr.getRcrt_nope());
+		
+		int lctrUpdate			= js.updateLctr(lctr);
+		System.out.println("JwController updateList lctrUpdate->"+lctrUpdate);
+		
+		// Syllabus_Unit 업데이트
+		int syllabusUnitUpdate	= js.updateSyll(syllabus_unit);
+		System.out.println("JwController updateList syllabusUnitUpdate->"+syllabusUnitUpdate);
+		
+		// Conts_Ch 업데이트
+		int contsChUpdate		= js.updateContsCh(conts_ch);
+		System.out.println("JwController updateList contsChUpdate->"+contsChUpdate);
+
+		model.addAttribute("lctrUpdate", lctrUpdate);		
+		model.addAttribute("onlnLctrUpdate", onlnLctrUpdate);
+		model.addAttribute("syllabusUnitUpdate", syllabusUnitUpdate);
+		model.addAttribute("contsChUpdate", contsChUpdate);
+		
+		return "forward:/jw/detailOnlnLctr";
 	}
 	
 }

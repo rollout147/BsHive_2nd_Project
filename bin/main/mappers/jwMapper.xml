@@ -194,4 +194,22 @@
  	</select>
  
  
+ 	<update id="updateLctr" parameterType="Lctr">
+ 		UPDATE "LCTR" SET 
+ 		
+ 		WHERE "LCTR_NUM" = #{lctr_num}
+ 	</update>
+ 	
+ 	<update id="updateOnlnLctr" parameterType="Onln_Lctr">
+ 		UPDATE 
+ 	</update>
+ 	
+ 	<update id="updateSyll" parameterType="Syllabus_Unit">
+ 		UPDATE 
+ 	</update>
+ 	
+ 	<update id="updateContsCh" parameterType="Conts_Ch">
+ 		UPDATE 
+ 	</update>
+ 
  </mapper>
