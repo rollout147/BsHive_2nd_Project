@@ -382,7 +382,7 @@ public class JwController {
 	
 	// 마이페이지 나의 강의실에서 강의번호 클릭하면 상세보기
 	@GetMapping(value = "/detailOnlnLctr")
-	public String detailOnlnLctr(@RequestParam(value = "Lctr_num") Integer lctr_num,
+	public String detailOnlnLctr(@RequestParam("Lctr_num") Integer lctr_num,
 								 Model model) {
 		System.out.println("JwController detailOnlnLctr Start...");
 		
@@ -391,13 +391,15 @@ public class JwController {
 		System.out.println("JwController detailOnlnLctr onlnLctrDetailList->"+onlnLctrDetailList);
 		
 		model.addAttribute("onlnLctrDetailList", onlnLctrDetailList);
+		model.addAttribute("lctr_num", lctr_num);
+		System.out.println("detailOnlnLctr lctr_num->"+lctr_num);
 		
 		return "jw/detailOnlnLctr";
 	}
 	
 	// 수정폼 이동
 	@GetMapping(value = "/updateOnlnLctr")
-	public String updateList(@RequestParam(value = "Lctr_num") Integer lctr_num,
+	public String updateList(@RequestParam("lctr_num") Integer lctr_num,
 								 Model model) {
 		System.out.println("JwController updateOnlnLctr Start...");
 		System.out.println("JwController updateOnlnLctr Lctr_Num->"+lctr_num);
@@ -406,6 +408,7 @@ public class JwController {
 		System.out.println("JwController updateOnlnLctr onlnLctrDetailList->"+onlnLctrDetailList);
 		
 		model.addAttribute("onlnLctrDetailList", onlnLctrDetailList);
+		model.addAttribute("lctr_num", lctr_num);
 		
 		return "jw/updateOnlnLctr";
 	}
@@ -448,3 +451,4 @@ public class JwController {
 	}
 	
 }
+

@@ -70,11 +70,12 @@
 		<div class="content1" style="border-top: 2px solid black;">
 			<h2 style="padding-top: 20px; padding-bottom: 10px;">강의 상세보기</h2>
 			<div class="content1">
-				<input type="hidden" name="Lctr_num" value="${onlnLctrDetail.lctr_num}" readonly="readonly"/>
+				<input type="hidden" name="lctr_num" value="${lctr_num}" readonly="readonly"/>
 			
 			    <!-- 강의 정보 테이블 -->
 				<div class="table-container">  	
-				   	<c:forEach var="onlnLctrDetail" items="${onlnLctrDetailList}">	 
+				   	<c:forEach var="onlnLctrDetail" items="${onlnLctrDetailList}">
+				   		 
 					    <table class="styled-table">
 							<tr>
 								<th>강의명</th><td>${onlnLctrDetail.lctr_name}</td>
@@ -124,10 +125,18 @@
 				</div>
 				
 				<div style="display: flex; justify-content: center; align-items: center; gap: 20px; height: 10vh;">
-				    <button onclick="window.location.href='<%= request.getContextPath() %>/se/onlnList';" 
+				    <button onclick="window.location.href='<%= request.getContextPath() %>/jh/registeredClassProfessor';" 
 					        style="padding: 10px 20px; font-size: 16px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
 					    뒤로가기
 					</button>
+					
+					<form action="updateOnlnLctr" method="get">
+				        <input type="hidden" name="lctr_num" value="${lctr_num}">
+				        <button type="submit" 
+				                style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+				            수정하기
+				        </button>
+				    </form>
 				</div>
 			</div>
 		</div>

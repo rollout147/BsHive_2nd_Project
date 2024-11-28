@@ -195,23 +195,37 @@
  
  
  	<update id="updateLctr" parameterType="Lctr">
- 		UPDATE "LCTR" SET "LCTR_NAME" = #{lctr_name} 		
- 		WHERE "LCTR_NUM" = #{lctr_num}
+ 		UPDATE	"LCTR" 
+ 		SET		"LCTR_NAME" = #{lctr_name} 		
+ 		WHERE	"LCTR_NUM" = #{lctr_num}
  	</update>
  	
  	<update id="updateOnlnLctr" parameterType="Onln_Lctr">
- 		UPDATE "Onln_Lctr"
+ 		UPDATE	"ONLN_LCTR"
+ 		SET		"LCTR_EXPLN" = #{lctr_expln},
+	 			"BGNG_YMD" = #{bgng_ymd},
+	 			"END_YMD" = #{end_ymd},
+	 			"FNSH_CRTR" = #{fnsh_crtr},
+	 			"RCRT_NOPE" = #{rcrt_nope}
  		
- 		
- 		WHERE "LCTR_NUM" = #{lctr_num}
+ 		WHERE	"LCTR_NUM" = #{lctr_num}
  	</update>
  	
  	<update id="updateSyll" parameterType="Syllabus_Unit">
- 		UPDATE 
+ 		UPDATE	"SYLLABUS_UNIT"
+ 		SET		"VDO_ID" = #{vdo_id},
+ 				"CONTS_NM" = #{conts_nm},
+ 				"PLAY_HR" = #{play_hr}
+ 				
+ 		WHERE	"LCTR_NUM" = #{lctr_num}
  	</update>
  	
  	<update id="updateContsCh" parameterType="Conts_Ch">
- 		UPDATE 
+ 		UPDATE	"CONTS_CH"
+ 		SET		"CH_NUM" = #{ch_num},
+ 				"CH_NM" = #{ch_nm},
+ 				"PLAY_START" = #{play_start}
+ 		WHERE	"LCTR_NUM" = #{lctr_num}		
  	</update>
  
  </mapper>
