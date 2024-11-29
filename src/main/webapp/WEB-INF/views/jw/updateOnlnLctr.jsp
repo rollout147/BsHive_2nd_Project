@@ -72,7 +72,7 @@
 			<h2 style="padding-top: 20px; padding-bottom: 10px;">강의 내용 수정</h2>
 			<div class="content1">
 		
-				<form action="updateOnlnLctr" method="post">
+				<form action="updateList" method="post">
 				    <input type="hidden" name="lctr_num" value="${lctr_num}">
 				    
 				    <div class="table-container">  	
@@ -136,7 +136,12 @@
 						</c:forEach>
 					</div>
 					
-				    <button type="submit" class="submit-btn">저장하기</button>
+					<div style="display: flex; justify-content: center; align-items: center; gap: 20px; height: 10vh;">
+					    <button type="submit" 
+					    style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+					    	저장하기
+					    </button>
+					</div>
 				</form>
 			
 			</div>
