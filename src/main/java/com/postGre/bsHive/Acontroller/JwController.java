@@ -437,6 +437,7 @@ public class JwController {
 	        lctr.setAply_ydm(onlnLctr.getBgng_ymd());
 	        lctr.setEnd_date(onlnLctr.getEnd_ymd());
 	        lctr.setPscp_nope(onlnLctr.getRcrt_nope());
+	        
 	        lctrUpdate += js.updateLctr(lctr);
 	    }
 		System.out.println("JwController updateList lctrUpdate->"+lctrUpdate);
