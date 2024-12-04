@@ -415,49 +415,31 @@ public class JwController {
 	
 	// 수정완료후 이동
 	@PostMapping(value = "updateList")
-	public String updateAllOnlnLctr(@RequestParam("onln_lctr_list") List<Onln_Lctr> onlnLctrs,
-									@RequestParam("syllabus_unit_list") List<Syllabus_Unit> syllabusUnits,
-									@RequestParam("conts_ch_list") List<Conts_Ch> contsChs,
+	public String updateAllOnlnLctr(Onln_Lctr onln_lctr,
+		 							Syllabus_Unit syllabus_unit,
+		 							Conts_Ch conts_ch,
 								 	Model model) {
 		System.out.println("JwController updateList Start...");
 		
 		// Onln_Lctr 업데이트
-		int onlnLctrUpdate = 0;
-	    for (Onln_Lctr onlnLctr : onlnLctrs) {
-	        System.out.println("updateList onln_lctr->" + onlnLctr);
-	        
-	        onlnLctrUpdate += js.updateOnlnLctr(onlnLctr);
-	    }
+		int onlnLctrUpdate		= js.updateOnlnLctr(onln_lctr);
 		System.out.println("JwController updateList onlnLctrUpdate->"+onlnLctrUpdate);
-		
+
 		// Lctr 업데이트
-		int lctrUpdate = 0;
-	    for (Onln_Lctr onlnLctr : onlnLctrs) {
-	        Lctr lctr = new Lctr();
-	        lctr.setAply_ydm(onlnLctr.getBgng_ymd());
-	        lctr.setEnd_date(onlnLctr.getEnd_ymd());
-	        lctr.setPscp_nope(onlnLctr.getRcrt_nope());
-	        
-	        lctrUpdate += js.updateLctr(lctr);
-	    }
+		Lctr lctr = new Lctr();
+		lctr.setAply_ydm(onln_lctr.getBgng_ymd());
+		lctr.setEnd_date(onln_lctr.getEnd_ymd());
+		lctr.setPscp_nope(onln_lctr.getRcrt_nope());
+		
+		int lctrUpdate			= js.updateLctr(lctr);
 		System.out.println("JwController updateList lctrUpdate->"+lctrUpdate);
-		
+
 		// Syllabus_Unit 업데이트
-		int syllabusUnitUpdate = 0;
-	    for (Syllabus_Unit syllabusUnit : syllabusUnits) {
-	        System.out.println("updateList syllabus_unit->" + syllabusUnit);
-	        
-	        syllabusUnitUpdate += js.updateSyll(syllabusUnit);
-	    }
+		int syllabusUnitUpdate	= js.updateSyll(syllabus_unit);
 		System.out.println("JwController updateList syllabusUnitUpdate->"+syllabusUnitUpdate);
-		
+
 		// Conts_Ch 업데이트
-		int contsChUpdate = 0;
-	    for (Conts_Ch contsCh : contsChs) {
-	        System.out.println("updateList conts_ch->" + contsCh);
-	        
-	        contsChUpdate += js.updateContsCh(contsCh);
-	    }
+		int contsChUpdate		= js.updateContsCh(conts_ch);
 		System.out.println("JwController updateList contsChUpdate->"+contsChUpdate);
 
 		model.addAttribute("lctrUpdate", lctrUpdate);		
