@@ -424,6 +424,7 @@ public class JwController {
 		// Onln_Lctr 업데이트
 		int onlnLctrUpdate		= js.updateOnlnLctr(onln_lctr);
 		System.out.println("JwController updateList onlnLctrUpdate->"+onlnLctrUpdate);
+		model.addAttribute("onlnLctrUpdate", onlnLctrUpdate);
 
 		// Lctr 업데이트
 		Lctr lctr = new Lctr();
@@ -433,18 +434,16 @@ public class JwController {
 		
 		int lctrUpdate			= js.updateLctr(lctr);
 		System.out.println("JwController updateList lctrUpdate->"+lctrUpdate);
+		model.addAttribute("lctrUpdate", lctrUpdate);
 
 		// Syllabus_Unit 업데이트
 		int syllabusUnitUpdate	= js.updateSyll(syllabus_unit);
 		System.out.println("JwController updateList syllabusUnitUpdate->"+syllabusUnitUpdate);
+		model.addAttribute("syllabusUnitUpdate", syllabusUnitUpdate);
 
 		// Conts_Ch 업데이트
 		int contsChUpdate		= js.updateContsCh(conts_ch);
 		System.out.println("JwController updateList contsChUpdate->"+contsChUpdate);
-
-		model.addAttribute("lctrUpdate", lctrUpdate);		
-		model.addAttribute("onlnLctrUpdate", onlnLctrUpdate);
-		model.addAttribute("syllabusUnitUpdate", syllabusUnitUpdate);
 		model.addAttribute("contsChUpdate", contsChUpdate);
 		
 		return "forward:/jw/detailOnlnLctr";

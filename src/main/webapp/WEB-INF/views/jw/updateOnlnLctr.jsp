@@ -76,64 +76,64 @@
 				    <input type="hidden" name="lctr_num" value="${lctr_num}">
 				    
 				    <div class="table-container">  	
-						<c:forEach var="onlnLctrDetail" items="${onlnLctrDetailList}">
-				    
-						    <table class="styled-table">
-						        <tr>
-						            <th>강의명</th>
-						            <td><input type="text" name="lctr_name" value="${onlnLctrDetail.lctr_name}" required></td>
-						        </tr>
-						        <tr>
-						            <th>강의설명</th>
-						            <td><textarea rows="10" cols="50" name="lctr_expln" required>${onlnLctrDetail.lctr_expln}</textarea></td>
-						        </tr>
-						        <tr>	
-									<th>시작일</th>
-									<td><input type="text" name="bgng_ymd" value = "${onlnLctrDetail.bgng_ymd}"></td>
-								</tr>
-								<tr>
-									<th>종료일</th>
-									<td><input type="text" name="end_ymd" value="${onlnLctrDetail.end_ymd}"></td>
-								</tr>
-								<tr>
-									<th>모집인원수</th>
-									<td><input type="text" name="rcrt_nope" value="${onlnLctrDetail.rcrt_nope}"></td>
-								<tr>	
-									<th>수료기준</th>
-									<td><input type="text" name="fnsh_crtr" value="${onlnLctrDetail.fnsh_crtr}"></td>
-								</tr>
-								
-								<tr>
-									<th>비디오ID</th>
-									<td><input type="text" name="vdo_id" value="${onlnLctrDetail.vdo_id}"></td>
-								</tr>
-								<tr>
-									<th>콘텐츠 이름</th>
-									<td><input type="text" name="conts_nm" value="${onlnLctrDetail.conts_nm}"></td>
-								</tr>
-								<tr>	
-									<th>재생시간</th>
-									<td><input type="text" name="play_hr" value="${onlnLctrDetail.play_hr}"></td>
-								</tr>
-								<tr>
-									<th>첨부파일</th>
-									<td><input type="text" name="file_group" value="${onlnLctrDetail.file_group}"></td>
-								</tr>
-					
-								<tr>
-									<th>챕터번호</th>
-									<td><input type="text" name="ch_num" value="${onlnLctrDetail.ch_num}"></td>
-								</tr>
-								<tr>
-									<th>챕터이름</th>
-									<td><input type="text" name="ch_nm" value="${onlnLctrDetail.ch_nm}"></td>
-								</tr>
-								<tr>	
-									<th>시작시간</th>
-									<td><input type="text" name="play_start" value="${onlnLctrDetail.play_start}"></td>
-								</tr>
-						    </table>
-						</c:forEach>
+					    <table class="styled-table">
+					    	<!-- Onln_Lctr -->
+					        <tr>
+					            <th>강의명</th>
+					            <td><input type="text" name="onln_lctr.lctr_name" value="${onln_lctr.lctr_name}" required></td>
+					        </tr>
+					        <tr>
+					            <th>강의설명</th>
+					            <td><textarea rows="10" cols="50" name="onln_lctr.lctr_expln" required>${onln_lctr.lctr_expln}</textarea></td>
+					        </tr>
+					        <tr>	
+								<th>시작일</th>
+								<td><input type="text" name="onln_lctr.bgng_ymd" value = "${onln_lctr.bgng_ymd}"></td>
+							</tr>
+							<tr>
+								<th>종료일</th>
+								<td><input type="text" name="onln_lctr.end_ymd" value="${onln_lctr.end_ymd}"></td>
+							</tr>
+							<tr>
+								<th>모집인원수</th>
+								<td><input type="text" name="onln_lctr.rcrt_nope" value="${onln_lctr.rcrt_nope}"></td>
+							<tr>	
+								<th>수료기준</th>
+								<td><input type="text" name="onln_lctr.fnsh_crtr" value="${onln_lctr.fnsh_crtr}"></td>
+							</tr>
+							
+							<!-- Syllabus_Unit -->
+							<tr>
+								<th>비디오ID</th>
+								<td><input type="text" name="syllabus_unit.vdo_id" value="${syllabus_unit.vdo_id}"></td>
+							</tr>
+							<tr>
+								<th>콘텐츠 이름</th>
+								<td><input type="text" name="syllabus_unit.conts_nm" value="${syllabus_unit.conts_nm}"></td>
+							</tr>
+							<tr>	
+								<th>재생시간</th>
+								<td><input type="text" name="syllabus_unit.play_hr" value="${syllabus_unit.play_hr}"></td>
+							</tr>
+							<tr>
+								<th>첨부파일</th>
+								<td><input type="text" name="syllabus_unit.file_group" value="${syllabus_unit.file_group}"></td>
+							</tr>
+				
+							<!-- Conts_Ch -->
+							<tr>
+								<th>챕터번호</th>
+								<td><input type="text" name="conts_ch.ch_num" value="${conts_ch.ch_num}"></td>
+							</tr>
+							<tr>
+								<th>챕터이름</th>
+								<td><input type="text" name="conts_ch.ch_nm" value="${conts_ch.ch_nm}"></td>
+							</tr>
+							<tr>	
+								<th>시작시간</th>
+								<td><input type="text" name="conts_ch.play_start" value="${conts_ch.play_start}"></td>
+							</tr>
+					    </table>
 					</div>
 					
 					<div style="display: flex; justify-content: center; align-items: center; gap: 20px; height: 10vh;">
