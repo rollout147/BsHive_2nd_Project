@@ -77,7 +77,7 @@
 				    
 				    <div class="table-container">  	
 					    <table class="styled-table">
-					    	<!-- Onln_Lctr -->
+					    	<!-- Onln_Lctr DTO -->
 					        <tr>
 					            <th>강의명</th>
 					            <td><input type="text" name="onln_lctr.lctr_name" value="${onln_lctr.lctr_name}" required></td>
@@ -102,7 +102,7 @@
 								<td><input type="text" name="onln_lctr.fnsh_crtr" value="${onln_lctr.fnsh_crtr}"></td>
 							</tr>
 							
-							<!-- Syllabus_Unit -->
+							<!-- Syllabus_Unit DTO -->
 							<tr>
 								<th>비디오ID</th>
 								<td><input type="text" name="syllabus_unit.vdo_id" value="${syllabus_unit.vdo_id}"></td>
@@ -120,7 +120,7 @@
 								<td><input type="text" name="syllabus_unit.file_group" value="${syllabus_unit.file_group}"></td>
 							</tr>
 				
-							<!-- Conts_Ch -->
+							<!-- Conts_Ch DTO -->
 							<tr>
 								<th>챕터번호</th>
 								<td><input type="text" name="conts_ch.ch_num" value="${conts_ch.ch_num}"></td>
