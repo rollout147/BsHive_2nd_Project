@@ -34,7 +34,7 @@
                     <td><input type="text" name="lctr_name" required></td>
                 </tr>
                 <tr><th>강의설명</th>
-                    <td><textarea rows="10" cols="100" name="lctr_expln"></textarea></td>
+                    <td><textarea rows="10" cols="50" name="lctr_expln"></textarea></td>
                 </tr>
                 <tr><th>시작일</th>
                     <td><input type="date" id="bgng_ymd" name="bgng_ymd" required></td>
